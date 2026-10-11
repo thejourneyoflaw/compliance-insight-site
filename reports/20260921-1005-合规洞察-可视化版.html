@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>合规洞察 · 可视化报告 · 2026-09-21 ~ 10-05</title>
+<style>
+:root{
+  --bg:#faf9f6;--card:#fff;--ink:#13191c;--ink2:#202a2f;--gray:#5b6b70;--faint:#8a969a;
+  --border:#dfe4e1;--gold:#b8873a;--gold-s:#d3b26a;--gold-soft:#f5eedd;
+  --coral:#d86a52;--coral-soft:#fae9e4;--green:#3d7a52;--green-soft:#eaf3ec;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.65}
+.serif{font-family:"Songti SC","STSong","SimSun",serif}
+.wrap{max-width:960px;margin:0 auto;padding:36px 24px 70px}
+/* 封面区 */
+.cover{text-align:center;padding:30px 0 26px;border-bottom:1px solid var(--border)}
+.cover .k{font-size:12px;letter-spacing:4px;color:var(--gold);margin-bottom:10px}
+.cover h1{font-size:34px;font-weight:700;letter-spacing:2px}
+.cover .sub{color:var(--gray);margin-top:10px;font-size:14px}
+.bigstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 8px}
+.bs{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center}
+.bs .n{font-size:30px;font-weight:700;font-family:"Songti SC",serif;color:var(--gold)}
+.bs .l{font-size:12px;color:var(--gray);margin-top:4px}
+/* 区块 */
+section{margin-top:34px}
+section>h2{font-family:"Songti SC",serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+section>h2::before{content:'';width:5px;height:20px;background:var(--gold-s);border-radius:3px}
+/* 趋势 */
+.trend-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px 10px}
+.legend{display:flex;gap:18px;font-size:12px;color:var(--gray);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+/* 分布+词云 */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.panel h3{font-size:14.5px;font-weight:700;margin-bottom:14px}
+.brow{display:flex;align-items:center;gap:10px;margin-bottom:11px;font-size:12.5px}
+.brow .bn{width:118px;color:var(--ink2);flex:none;text-align:right}
+.brow .track{flex:1;height:15px;background:#f1f3f0;border-radius:8px;overflow:hidden}
+.brow .fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--gold-s),var(--gold))}
+.brow .num{width:26px;color:var(--gray)}
+.cloud{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;justify-content:center;padding:10px 0}
+.cloud span{color:#64748b}
+/* 条目全览 */
+.chap{margin-bottom:26px}
+.chap-h{font-family:"Songti SC",serif;font-size:16.5px;font-weight:700;color:var(--ink);padding:10px 0 8px;border-bottom:2px solid var(--gold-soft);display:flex;align-items:baseline;gap:10px}
+.chap-h .cnt{font-size:12px;color:var(--faint);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-weight:400}
+.entry{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 19px;margin-top:12px}
+.entry .t{font-family:"Songti SC",serif;font-size:15.5px;font-weight:700;line-height:1.55}
+.entry .m{font-size:11.5px;color:var(--faint);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.entry .m .sc{color:var(--gold);font-weight:700;font-size:12px}
+.entry .m .tp{background:var(--gold-soft);color:var(--gold);border-radius:4px;padding:0 7px;font-weight:600}
+.entry .a{font-size:13px;line-height:1.8;color:var(--ink2);margin-top:9px}
+.entry .q{margin-top:8px;background:var(--green-soft);border-left:3px solid var(--green);border-radius:0 7px 7px 0;padding:6px 11px;font-size:11.5px;color:#2f5f40}
+.entry .src{margin-top:8px;font-size:11.5px;color:var(--faint)}
+.entry .src b{color:var(--gold);font-weight:600}
+/* 建议 */
+.sug{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px}
+.sug li{list-style:none;display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border);font-size:13.5px;line-height:1.7}
+.sug li:last-child{border-bottom:none}
+.sug .no{flex:none;width:24px;height:24px;border-radius:50%;background:var(--gold-soft);color:var(--gold);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.foot{text-align:center;color:var(--faint);font-size:12px;margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+@media print{body{background:#fff}.wrap{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover">
+    <div class="k">COMPLIANCE INSIGHT</div>
+    <h1 class="serif">合规洞察 · 可视化报告</h1>
+    <div class="sub">2026年9月21日 — 10月5日（15天窗口） · 互联网 / 信息技术 / 人工智能</div>
+  </div>
+
+  <div class="bigstats">
+    <div class="bs"><div class="n">92</div><div class="l">窗口内情报总量</div></div>
+    <div class="bs"><div class="n">33</div><div class="l">入选解读（≥55分）</div></div>
+    <div class="bs"><div class="n">4</div><div class="l">主题主线</div></div>
+    <div class="bs"><div class="n">3</div><div class="l">重点处置事项</div></div>
+  </div>
+
+  <section>
+    <h2>十五日情报趋势</h2>
+    <div class="trend-box">
+      <div class="legend"><span><i style="background:var(--gold)"></i>入选解读</span><span><i style="background:#c9d4cd"></i>采集总量</span></div>
+      <svg viewBox="0 0 880 190" style="width:100%">
+        <g stroke="#eef1ed"><line x1="40" y1="35" x2="860" y2="35"/><line x1="40" y1="80" x2="860" y2="80"/><line x1="40" y1="125" x2="860" y2="125"/></g>
+        <g font-size="10.5" fill="#9aa6a3">
+          <text x="40" y="30">10</text><text x="40" y="75">6</text><text x="40" y="120">2</text>
+          <text x="60" y="168">09-21</text><text x="255" y="168">09-25</text><text x="450" y="168">09-29</text><text x="645" y="168">10-02</text><text x="820" y="168">10-05</text>
+        </g>
+        <path d="M70,140 L135,120 L200,128 L265,96 L330,72 L395,88 L460,132 L525,118 L580,140 L620,100 L665,110 L710,74 L760,58 L815,86 L855,70" fill="none" stroke="#c9d4cd" stroke-width="2"/>
+        <path d="M70,158 L135,150 L200,154 L265,134 L330,122 L395,130 L460,152 L525,146 L580,156 L620,128 L665,134 L710,112 L760,104 L815,122 L855,116" fill="none" stroke="#b8873a" stroke-width="2.5"/>
+        <g fill="#b8873a"><circle cx="710" cy="112" r="4"/><circle cx="760" cy="104" r="4"/></g>
+        <text x="700" y="98" font-size="11" fill="#8a6a2c">备案细化+标识办法</text>
+      </svg>
+    </div>
+  </section>
+
+  <section>
+    <h2>主题分布与高频事由</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>主题分布（入选 33 条）</h3>
+        <div class="brow"><span class="bn">人工智能·算法治理</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="num">9</span></div>
+        <div class="brow"><span class="bn">数据要素·个保</span><div class="track"><div class="fill" style="width:89%"></div></div><span class="num">8</span></div>
+        <div class="brow"><span class="bn">平台经济·内容治理</span><div class="track"><div class="fill" style="width:44%"></div></div><span class="num">4</span></div>
+        <div class="brow"><span class="bn">司法·立法动态</span><div class="track"><div class="fill" style="width:33%"></div></div><span class="num">3</span></div>
+        <div class="brow"><span class="bn">域外监管</span><div class="track"><div class="fill" style="width:22%"></div></div><span class="num">2</span></div>
+        <div class="brow"><span class="bn">技术动态（不解读）</span><div class="track"><div class="fill" style="width:33%;background:#d8dedb"></div></div><span class="num">7*</span></div>
+      </div>
+      <div class="panel">
+        <h3>高频监管事由</h3>
+        <div class="cloud">
+          <span style="font-size:27px;color:#b8873a;font-weight:700">算法/模型备案</span>
+          <span style="font-size:20px;color:#c05a42">数据出境</span>
+          <span style="font-size:18px;color:#3d7a52">合规审计</span>
+          <span style="font-size:16px;color:#13191c">AI内容标识</span>
+          <span style="font-size:15px;color:#6d5ba8">重要数据</span>
+          <span style="font-size:14px;color:#5b6b70">独家长效协议</span>
+          <span style="font-size:13.5px;color:#8a6a2c">数据资产入表</span>
+          <span style="font-size:13px;color:#8a969a">SDK权限</span>
+          <span style="font-size:12.5px;color:#9aa6a3">算法公示</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>重点条目全览（按主题）</h2>
+
+    <div class="chap">
+      <div class="chap-h">一、人工智能与算法治理 <span class="cnt">4 条解读</span></div>
+      <div class="entry"><div class="t">网信办《生成式人工智能服务备案实施细化要求》</div>
+        <div class="m"><span class="sc">92</span><span class="tp">新法规</span><span>10-04 · 网信办</span></div>
+        <div class="a">把《暂行办法》第17条"安全评估"落地为可核查实测记录，属义务履行标准明确化；未按期备案按第21、22条处理。面向公众的AI对话/生成功能属备案范围，上线计划预估延2-4周。</div>
+        <div class="q">原文依据："…提供者应当提交安全评估报告及关键问答实测记录…"（第四项）</div>
+        <div class="src">来源：<b>网信办官网</b> · 官方直连</div></div>
+      <div class="entry"><div class="t">《人工智能生成合成内容标识办法》施行首日</div>
+        <div class="m"><span class="sc">85</span><span class="tp">执法动态</span><span>10-04 · 网信办/澎湃</span></div>
+        <div class="a">生成合成内容须加显式+隐式标识，传播平台负有核验提示义务；违规依《网安法》第65条处理。UGC+AI复合平台须在发布链路嵌入标识检测。</div>
+        <div class="q">原文依据："…网络信息内容传播平台应当核验生成合成内容是否含有…标识…"（第9条）</div>
+        <div class="src">来源：<b>网信办官网</b> · 官方直连</div></div>
+      <div class="entry"><div class="t">工信部大模型应用安全管理要求（Agent 调用链入评估）</div>
+        <div class="m"><span class="sc">72</span><span class="tp">新法规</span><span>10-01 · 工信部</span></div>
+        <div class="a">监管首次明确Agent形态评估口径：插件调用、外部接口交互纳入上线前安全评估；工具调用型AI功能文档需补调用链图谱与越权测试。</div>
+        <div class="q">原文依据："…应当对大模型的工具调用、外部接口交互等调用链安全进行评估…"（第三（二）项）</div>
+        <div class="src">来源：<b>工信部官网</b></div></div>
+      <div class="entry"><div class="t">算法推荐执法案例：未公示算法原理被限期整改</div>
+        <div class="m"><span class="sc">60</span><span class="tp">执法动态</span><span>09-28 · 网信办</span></div>
+        <div class="a">执法要点："算法备案≠公示义务免除"；公示信息须与备案一致。推荐/排序功能页应补公示说明。</div>
+        <div class="q">原文依据："…以显著方式告知用户…并公示算法的基本原理…"（第16条）</div>
+        <div class="src">来源：<b>网信办官网</b></div></div>
+    </div>
+
+    <div class="chap">
+      <div class="chap-h">二、数据要素与个人信息保护 <span class="cnt">4 条解读</span></div>
+      <div class="entry"><div class="t">网信办《个人信息出境认证办法》（11-01 施行）</div>
+        <div class="m"><span class="sc">84</span><span class="tp">新法规</span><span>10-03 · 网信办</span></div>
+        <div class="a">与安全评估、标准合同构成"三条路径"；存量跨境业务须在施行后60日内完成申报；未按期按《个保法》第66条处理。</div>
+        <div class="q">原文依据："…可以通过国家网信部门认定的专业机构认证…"（第4条）</div>
+        <div class="src">来源：<b>网信办官网</b></div></div>
+      <div class="entry"><div class="t">《网络数据安全管理条例》配套细则：重要数据年度自评</div>
+        <div class="m"><span class="sc">75</span><span class="tp">新法规</span><span>10-02 · 网信办</span></div>
+        <div class="a">重要数据识别落为年度自评报告义务（每年1月31日前）；建议30日内完成数据资产盘点与目录比对。</div>
+        <div class="q">原文依据："…每年1月31日前完成上一年度重要数据识别自评…"（细则第12条）</div>
+        <div class="src">来源：<b>网信办官网</b></div></div>
+      <div class="entry"><div class="t">《个人信息保护合规审计管理办法》施行</div>
+        <div class="m"><span class="sc">68</span><span class="tp">新法规</span><span>09-30 · 网信办</span></div>
+        <div class="a">超千万条个人信息的处理者每年至少一次强制审计，报告留存≥3年；建议Q4完成首次自审。</div>
+        <div class="q">原文依据："…每年至少开展一次合规审计…"（第6条）</div>
+        <div class="src">来源：<b>网信办官网</b></div></div>
+      <div class="entry"><div class="t">财政部数据资源会计处理应用指南</div>
+        <div class="m"><span class="sc">63</span><span class="tp">政策文件</span><span>09-29 · 财政部</span></div>
+        <div class="a">数据资源按无形资产/存货/研发资本化三类计量；入表不改变权属，披露避免"确权"式表述。</div>
+        <div class="q">原文依据："…应当按照业务模式和持有目的…确认为无形资产或存货…"（第二条）</div>
+        <div class="src">来源：<b>财政部官网</b></div></div>
+    </div>
+
+    <div class="chap">
+      <div class="chap-h">三、平台经济与内容治理 <span class="cnt">2 条解读</span></div>
+      <div class="entry"><div class="t">市场监管总局"二选一"行政处罚</div>
+        <div class="m"><span class="sc">82</span><span class="tp">执法处罚</span><span>10-03 · 市场监管总局</span></div>
+        <div class="a">依《反垄断法》第22条认定限定交易；独家合作条款模板须对照《禁止滥用市场支配地位行为规定》第14条自查，长期独家协议建议增设退出机制。</div>
+        <div class="q">原文依据："…无正当理由限定交易相对人…"（第14条）</div>
+        <div class="src">来源：<b>市场监管总局官网</b></div></div>
+      <div class="entry"><div class="t">工信部 APP/SDK 合规通报（37 款）</div>
+        <div class="m"><span class="sc">66</span><span class="tp">执法动态</span><span>09-30 · 工信部</span></div>
+        <div class="a">高频事由：违规收集、超范围索权、强制弹窗。集成第三方SDK前做权限映射自查；发版流程增加SDK清单核对。</div>
+        <div class="q">原文依据："…未经用户同意，不得收集与所提供服务无关的个人信息…"（第5条）</div>
+        <div class="src">来源：<b>工信部官网</b></div></div>
+    </div>
+
+    <div class="chap">
+      <div class="chap-h">四、司法·立法与域外 <span class="cnt">4 条</span></div>
+      <div class="entry"><div class="t">最高法数据权益保护司法解释（征求意见稿）</div>
+        <div class="m"><span class="sc">78</span><span class="tp">征求意见</span><span>10-02 · 最高法</span></div>
+        <div class="a">首次在司法层面回应数据"三权"界定；征求意见期是行业意见窗口，核心条款重合度高宜按"准义务"预研。</div>
+        <div class="q">原文依据："…经营者对依法获取的数据资源享有…"（征求意见稿第3条）</div>
+        <div class="src">来源：<b>最高人民法院官网</b></div></div>
+      <div class="entry"><div class="t">欧盟 Digital Omnibus：AI 法案高风险义务推迟</div>
+        <div class="m"><span class="sc">55</span><span class="tp">域外动态</span><span>09-27 · EUR-Lex</span></div>
+        <div class="a">时间表调整而非义务减免，高风险分类标准未变；涉欧业务保持准备节奏，无涉欧业务作趋势参考。</div>
+        <div class="q">Regulation (EU) 2026/… amending Regulation (EU) 2024/1689, Art. 113</div>
+        <div class="src">来源：<b>EUR-Lex 官方公报</b></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>下一步工作建议</h2>
+    <ul class="sug">
+      <li><span class="no">1</span>生成式AI功能上线前完成备案差距自查（实测记录新材料），重排涉及公众服务的产品发布计划。</li>
+      <li><span class="no">2</span>11月1日前完成个人信息出境业务盘点，在认证、标准合同、安全评估三条路径中选定申报方案。</li>
+      <li><span class="no">3</span>第四季度启动首次个人信息保护合规审计自审，同步完成数据资产盘点与重要数据目录比对。</li>
+      <li><span class="no">4</span>对照算法公示执法案例，检查推荐、排序功能页面的算法原理公示与备案信息一致性。</li>
+      <li><span class="no">5</span>结合数据权益司法解释征求意见期，组织行业意见内部评审，形成书面反馈。</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    合规洞察工具自动生成 · 解读附原文引文供复核 · 演示样例<br>
+    2026-10-05 · 窗口 2026-09-21 ~ 10-05
+  </div>
+</div>
+</body>
+</html>
