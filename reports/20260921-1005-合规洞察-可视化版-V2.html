@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>合规洞察 · 可视化报告 V2 · 2026-09-21 ~ 10-05</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--ink:#13191c;--ink2:#202a2f;--gray:#5b6b70;--faint:#8a969a;
+--border:#dfe4e1;--gold:#b8873a;--golds:#d3b26a;--goldsoft:#f5eedd;--coral:#c05a42;--coralsoft:#fae9e4;
+--green:#3d7a52;--greensoft:#eaf3ec;--obs:#8a969a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.65}
+.serif{font-family:"Songti SC","STSong","SimSun",serif}
+.layout{max-width:1120px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:158px 1fr;gap:26px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{display:none!important}}
+.toc{position:sticky;top:16px;align-self:start;font-size:12.5px}
+.toc a{display:block;color:var(--gray);text-decoration:none;padding:5px 10px;border-left:2px solid transparent;transition:.15s}
+.toc a.on{color:var(--gold);border-left-color:var(--golds);background:var(--goldsoft)}
+.toc .t{font-weight:700;color:var(--ink);margin-bottom:6px;padding-left:10px}
+main{min-width:0}
+.cover{text-align:center;padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.cover .k{font-size:11px;letter-spacing:4px;color:var(--gold);margin-bottom:8px}
+.cover h1{font-size:32px;font-weight:700;letter-spacing:2px}
+.cover .sub{color:var(--gray);margin-top:8px;font-size:13px}
+.cover .demo{color:var(--faint);font-size:11.5px;margin-top:6px}
+.bigstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0 6px}
+@media(max-width:700px){.bigstats{grid-template-columns:repeat(2,1fr)}}
+.bs{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 10px;text-align:center}
+.bs .n{font-size:28px;font-weight:700;font-family:"Songti SC",serif;color:var(--gold)}
+.bs .n.red{color:var(--coral)}.bs .n.org{color:#c07a2a}
+.bs .l{font-size:11.5px;color:var(--gray);margin-top:3px}
+section{margin-top:36px}
+section>h2{font-family:"Songti SC",serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+section>h2 .no{font-size:34px;color:var(--golds);opacity:.45;font-weight:400}
+section>.lead{color:var(--gray);font-size:12.5px;margin:0 0 16px 46px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.panel h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.stack{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:8px 0 4px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--gray);flex-wrap:wrap;align-items:center}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th{background:var(--goldsoft);color:#6b4f1d;font-weight:700;padding:8px 10px;text-align:left;white-space:nowrap;border:1px solid #eadfc8}
+td{padding:7px 10px;border:1px solid var(--border);color:var(--ink2);vertical-align:top}
+tr:nth-child(even) td{background:#fdfcf9}
+th.sortable{cursor:pointer}th.sortable:hover{background:#efe4cb}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:3px 12px;font-size:11.5px;color:var(--ink2);cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill{display:inline-block;border-radius:999px;padding:1px 9px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.pill.red{background:var(--coralsoft);color:var(--coral)}
+.pill.org{background:var(--goldsoft);color:#8a6a2c}
+.pill.yel{background:#eef1f0;color:var(--gray)}
+.pill.grn{background:var(--greensoft);color:var(--green)}
+.pill.soon{background:var(--coral);color:#fff}
+.dead{font-variant-numeric:tabular-nums}
+svg text{font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+.svgwrap{overflow-x:auto}
+.entry{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 19px;margin-top:12px;border-left-width:4px}
+.entry.lv-red{border-left-color:var(--coral)}.entry.lv-org{border-left-color:var(--gold)}.entry.lv-yel{border-left-color:var(--obs)}
+.entry .t{font-family:"Songti SC",serif;font-size:15.5px;font-weight:700;line-height:1.55}
+.entry .m{font-size:11.5px;color:var(--faint);margin-top:5px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.entry details{margin-top:8px}
+.entry summary{font-size:12px;color:var(--gold);cursor:pointer;font-weight:600}
+.entry .seg{font-size:13px;line-height:1.8;color:var(--ink2);margin-top:6px}
+.entry .seg .sk{font-weight:700;color:var(--ink)}
+.entry .src{margin-top:9px;font-size:11.5px;color:var(--faint);border-top:1px dashed var(--border);padding-top:8px}
+.chap-h{font-family:"Songti SC",serif;font-size:17px;font-weight:700;padding:10px 0 8px;border-bottom:2px solid var(--goldsoft);display:flex;gap:10px;align-items:baseline;margin-top:26px}
+.chap-h .cnt{font-size:11.5px;color:var(--faint);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-weight:400}
+.closing{background:var(--goldsoft);border:1px solid #eadfc8;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#6b4f1d;line-height:1.75;margin-top:14px}
+.foot{text-align:center;color:var(--faint);font-size:12px;margin-top:44px;padding-top:18px;border-top:1px solid var(--border)}
+.fabtop{position:fixed;right:20px;bottom:22px;width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;font-size:15px;z-index:90;box-shadow:0 4px 14px rgba(19,25,28,.3)}
+@media print{.toc,.fabtop{display:none}.layout{display:block;max-width:100%}@page{size:A4;margin:12mm}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}section{break-before:page}.entry,.panel{break-inside:avoid}.tablewrap{overflow:visible}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc" id="toc"><div class="t serif">目录</div></nav>
+<main>
+  <div class="cover">
+    <div class="k">COMPLIANCE INSIGHT · 可视化版</div>
+    <h1 class="serif" id="cv-title"></h1>
+    <div class="sub" id="cv-sub"></div>
+    <div class="demo">本版本为结构演示样例，数据为示例构造，未链接官方原文（与 Word 版同源数据）</div>
+  </div>
+  <div class="bigstats" id="stats"></div>
+
+  <section id="s1" data-t="总体态势"><h2><span class="no">01</span>总体态势</h2><div class="lead" id="s1-lead"></div>
+    <div class="grid2">
+      <div class="panel"><h3>风险等级构成与监管主线</h3><div class="stack" id="riskstack"></div><div class="legend" id="risklegend"></div>
+        <div id="mainlines" style="font-size:12.5px;color:var(--ink2);line-height:1.8;margin-top:12px"></div></div>
+      <div class="panel"><h3>深度解读主题分布</h3>
+        <div style="display:flex;align-items:center;gap:20px;justify-content:center;padding:6px 0">
+          <svg id="donut" width="150" height="150" viewBox="0 0 160 160"></svg>
+          <div class="legend" style="flex-direction:column;gap:8px" id="donutlegend"></div>
+        </div></div>
+    </div>
+  </section>
+
+  <section id="s3" data-t="风险矩阵"><h2><span class="no">02</span>重点风险态势</h2><div class="lead">可能性 × 影响矩阵：点 = 条目编号，右上为优先处置区；登记表与 Word 报告第三章同源</div>
+    <div class="panel svgwrap"><svg id="matrix" viewBox="0 0 660 470" style="width:100%;min-width:560px"></svg></div>
+    <div class="panel"><h3>风险登记表</h3><div class="tablewrap"><table id="risktable"></table></div></div>
+  </section>
+
+  <section id="s4" data-t="义务台账"><h2><span class="no">03</span>合规义务台账</h2><div class="lead">点击表头排序（时限/状态）；筛选条可组合。状态为演示初值，正式版由义务库运营更新</div>
+    <div class="panel"><div class="chips" id="oblig-chips"></div><div class="tablewrap"><table id="obligtable"></table></div></div>
+  </section>
+
+  <section id="s5" data-t="监管日历"><h2><span class="no">04</span>监管日历与倒计时</h2><div class="lead">未来 120 天确定性节点（圆点=日期节点，浅红区=30 天紧迫区，金虚线=今天）</div>
+    <div class="panel svgwrap"><svg id="timeline" viewBox="0 0 880 330" style="width:100%;min-width:640px"></svg></div>
+    <div class="panel"><div class="tablewrap"><table id="caltable"></table></div></div>
+  </section>
+
+  <section id="s6" data-t="专题透视"><h2><span class="no">05</span>专题透视</h2><div class="lead">数据出境三条路径（对应红色风险 R-01）与中外监管对照</div>
+    <div class="grid2">
+      <div class="panel"><h3>出境路径判断树</h3><div class="svgwrap"><svg id="tree" viewBox="0 0 430 310" style="width:100%"></svg></div></div>
+      <div class="panel"><h3>三条路径对比（末列为报告建议）</h3><div class="tablewrap"><table id="pathstable"></table></div></div>
+    </div>
+    <div class="panel"><h3 id="jur-title">域外对照矩阵</h3><div class="tablewrap"><table id="jurtable"></table></div></div>
+  </section>
+
+  <section id="s8" data-t="深度解读"><h2><span class="no">06</span>重点条目深度解读</h2><div class="lead">按主题章分组；左色带 = 风险等级；点开折叠看四段式全文</div>
+    <div id="chapters"></div>
+  </section>
+
+  <section id="s10" data-t="工作建议"><h2><span class="no">07</span>下一步工作建议</h2>
+    <div class="panel"><div class="tablewrap"><table id="sugtable"></table></div></div>
+  </section>
+
+  <section id="s11" data-t="附录索引"><h2><span class="no">08</span>附录：本期索引总表</h2><div class="lead">含未入选条目；类型 / 阶段 / 命中业务线三维标签</div>
+    <div class="panel"><div class="tablewrap"><table id="idxtable"></table></div></div>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</main>
+</div>
+<button class="fabtop" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">↑</button>
+
+<script type="application/json" id="viz-data">{"report": {"meta": {"title": "合规洞察报告", "issue": "2026年第19期（总第1期）", "window": "2026年9月21日至10月5日", "cutoff": "本期信息截至2026年10月5日18时", "classification": "内部资料", "demo_note": "本期为结构演示样例，全部条目数据为示例构造，未链接官方原文；正式刊发时以官方公布文本核验后引用，并逐条附原文直链与访问日期。"}, "methodology": {"sources": "本期监测官方信息源30个（国务院及部委官网、全国人大及最高法官网、全国标准信息公共服务平台、欧盟官方公报等，完整清单见附录3）", "funnel": "监测窗口内共采集有效动态92件，按业务相关度评估入选33件（阈值55分，满分100分），其中形成四段式深度解读13件", "analysis": "分析方式为系统初筛、法务复核双签：系统按六轴评分（业务线命中、义务变化、时限紧迫性、证据强度、确定性、涉外关联）初筛并生成解读草稿，法务逐条复核原文后定稿", "grading": "风险分级标准：红色（R）——法定义务已生效或30日内生效且公司现状不满足，须5个工作日内启动处置；橙色（O）——90日内生效或涉及主要业务模式，须15个工作日内形成落实方案；黄色（Y）——处于征求意见、趋势性或域外阶段，纳入观察清单", "limits": "局限性：本期为总第1期，无上期对比数据；域外规则以中文译文表述，关键义务判断以英文原文为准；推测性内容均已在文中显式标注", "next": "下期预告：总第2期监测窗口2026年10月6日至10月20日，将重点关注《个人信息出境认证办法》施行衔接及数据权益司法解释意见反馈情况"}, "overview": {"stats_para": "本期（2026年9月21日至10月5日）共采集有效监管动态92件，入选33件。其中：部门规章及规范性文件9件、国家标准2件、执法动态6件、司法与立法进程3件、域外规则4件、其余为技术动态与背景资讯（不展开解读）。入选动态集中于人工智能与数据两条主线。", "mainlines": ["主线一：生成式人工智能“备案—评估—标识”义务链条全面落地（见本报告四（一）（二）（三）），公司面向公众提供的AI功能面临的合规前置条件进一步刚性化。", "主线二：个人信息出境“安全评估—标准合同—认证”三条路径体系成型并进入施行倒计时（见本报告五（一）），存量跨境业务申报窗口开启。", "主线三：平台经济执法常态化与算法透明度执法并进（见本报告六（一）（二）、四（四）），独家合作与算法公示成为执法检查重点。"], "riskdist": "本期风险等级分布：红色1件（R-01）、橙色5件（O-01至O-05）、黄色7件（Y-01至Y-07）。因本报告为总第1期，暂无环比数据。", "calendar_preview": "下期窗口内确定性日程：10月17日前后数据权益司法解释征求意见截止；11月1日《个人信息出境认证办法》施行；12月31日前后存量出境申报60日期满；2027年1月31日重要数据年度自评与合规审计归档节点。详见本报告八（二）监管日历。"}, "risk_alerts": [{"id": "R-01", "level": "红色", "title": "《个人信息出境认证办法》11月1日施行，存量跨境业务申报窗口仅余约57天", "trigger": "《个人信息出境认证办法》第四条、第十一条（详见五（一））", "scope": "涉境外节点的数据回流业务，涉及3条产品线", "deadline": "施行后60日内完成申报（约2026年12月31日前），建议10月31日前完成路径选型", "action": "报告印发后5个工作日内启动处置，专报公司领导；由法务合规部牵头、数据管理部配合"}, {"id": "O-01", "level": "橙色", "title": "生成式人工智能备案新增实测记录要求，备案材料与公司现状存在差距", "trigger": "《生成式人工智能服务备案实施细化要求》第四项（详见四（一））", "scope": "面向公众提供的AI对话、内容生成功能", "deadline": "建议10月17日前完成排查建档，10月31日前完成安全评估报告编制立项", "action": "15个工作日内形成落实方案；由法务合规部牵头、科技研发部配合"}, {"id": "O-02", "level": "橙色", "title": "生成合成内容标识义务已生效，平台核验链路尚未建设", "trigger": "《人工智能生成合成内容标识办法》第九条（详见四（二））", "scope": "平台内容发布链路、用户协议与社区规则", "deadline": "建议11月15日前完成发布链路标识检测改造", "action": "15个工作日内形成落实方案；由科技研发部牵头"}, {"id": "O-03", "level": "橙色", "title": "大模型应用安全管理将Agent调用链纳入上线前评估", "trigger": "工信部《大模型应用安全管理要求》第三部分（详见四（三））", "scope": "工具调用型AI功能（插件、外部接口）", "deadline": "新功能上线前完成评估文档补充", "action": "15个工作日内形成落实方案；由科技研发部牵头、法务合规部配合"}, {"id": "O-04", "level": "橙色", "title": "个人信息保护合规审计年度义务触发，首次自审尚未开展", "trigger": "《个人信息保护合规审计管理办法》第六条、第十一条（详见五（三））", "scope": "全部涉个人信息处理业务", "deadline": "建议2026年第四季度完成首次自审并归档", "action": "15个工作日内形成落实方案；由法务合规部牵头"}, {"id": "O-05", "level": "橙色", "title": "重要数据识别年度自评义务落地，数据资产盘点尚未启动", "trigger": "《网络数据安全管理条例》配套实施细则第十二条（详见五（二））", "scope": "全部数据资产，涉及多条业务线", "deadline": "建议2026年10月31日前完成数据资产盘点与目录比对", "action": "15个工作日内形成落实方案；由数据管理部牵头"}], "chapters": [{"id": "A", "name": "人工智能与算法监管动态", "summary": "本章四项动态共同指向生成式人工智能义务链条的可核查化：备案材料标准化、标识核验平台化、Agent评估口径明确化、算法公示执法常态化。", "closing": "综合本章，监管逻辑已从框架立法期转入核验期：备案实测记录、标识核验、算法公示检查三线并进，义务的“可检测性”显著增强。四项义务叠加后，公司AI功能从立项、上线到运营的全生命周期均须留存合规证据；建议法务合规部与科技研发部建立AI功能合规检查点机制，将备案、标识、评估、公示四类义务嵌入研发流程门禁。", "items": [{"id": "A1", "risk": "O-01", "level": "橙", "title": "国家网信办发布生成式人工智能备案实施细化要求，备案进入“材料标准化、流程两级化”阶段", "fact": "2026年9月28日，国家互联网信息办公室发布《生成式人工智能服务备案实施细化要求》。主要内容：（1）明确备案范围为面向境内公众提供生成式人工智能服务的组织，实行属地省级网信部门初审、国家网信办终审的两级流程；（2）规定备案材料清单，包括安全自评估报告（须按GB/T 45654—2025编制）、模型基本情况表、训练数据来源与合法性说明、标识义务落实情况说明、安全事件应急处置预案等；（3）明确重大变更情形须重新履行评估备案程序；（4）自2026年11月1日起施行，存量服务给予六个月过渡期。", "analysis": "较此前规则，本项属义务明确化而非新设义务：该文件系对《生成式人工智能服务管理暂行办法》（国家互联网信息办公室等七部门令第15号，自2023年8月15日起施行，以下简称《暂行办法》）第十七条“安全评估+备案”双重义务的程序性细化，本身未新增实体义务，但将备案材料标准化（第四项要求提交“安全评估报告及关键问答实测记录”），实质抬高了举证门槛。就义务主体而言，《暂行办法》第二条以“向境内公众提供生成文本、图片、音频、视频等内容的服务”界定服务提供者；公司面向集团外部客户提供的智能问答、智能报告生成功能属于义务主体范围，嵌入信息化项目交付的AI能力是否构成“面向公众提供服务”存在解释空间。配套义务链条已经闭合：算法备案（《互联网信息服务算法推荐管理规定》第二十四条）、内容标识（《人工智能生成合成内容标识办法》，自2025年9月1日起施行）、安全评估技术依据（GB/T 45654—2025，自2025年11月1日起实施）。", "impact": "本项直接影响我方两条业务线：平台对外提供的AI生成功能（触发条件：面向境内公众提供服务）与嵌入客户项目交付的AI能力（触发条件待解释）。对照现状：（1）公司尚未开展生成式人工智能服务备案；（2）现有安全评估材料未按GB/T 45654—2025体例编制，与备案清单存在差距；（3）投标场景已出现“供应商AI功能须已完成备案或承诺中标后限期完成”的资格条件，备案进度直接影响投标应答。违规后果：未履行备案义务的，依据《暂行办法》第二十一条，由主管部门依照《中华人民共和国网络安全法》（2025年修正，自2026年1月1日起施行）等追究法律责任。据公开信息，头部服务商均已闭环备案，备案已成为行业事实门槛。", "action": "工作建议：（1）10月17日前完成存量及在研AI功能面向公众提供情况的排查建档（法务合规部牵头）；（2）对落入范围的产品，10月31日前完成安全自评估报告编制立项并启动属地网信部门沟通（科技研发部配合）；（3）10月24日前出具嵌入交付型AI功能是否构成“面向公众提供服务”的分析意见，同步修订投标合规承诺模板（法务合规部）；（4）本事项列为橙色风险（O-01），纳入合规义务台账（YW-01），按月更新进度。", "source": {"org": "国家网信办", "channel": "中国网信网 › 政策文件 › 通知公告", "pubDate": "2026-09-28", "url": null, "verified": false}}, {"id": "A2", "risk": "O-02", "level": "橙", "title": "《人工智能生成合成内容标识办法》施行，平台核验义务进入执法视野", "fact": "《人工智能生成合成内容标识办法》（国家网信办等四部门2025年3月7日公布，自2025年9月1日起施行）运行满一年，本期监管通报显示多家平台完成强制标注功能改造，显式标识与含元数据的隐式标识同步落地，配套强制性国家标准GB 45438—2025同步实施。", "analysis": "较此前规则，本项属义务持续履行阶段：办法第九条课以网络信息内容传播平台“核验生成合成内容是否含有规定的标识”的义务，属持续性作为义务；未履行核验义务提供传播服务的，依据《中华人民共和国网络安全法》第六十五条处理。GB 45438—2025作为强制性国家标准，使标识义务具备可检测的技术基准。", "impact": "本项直接影响我方平台内容发布链路（触发条件：平台提供用户生成内容与AI生成内容复合服务）。公司发布链路尚未嵌入标识检测能力，用户协议与社区规则亦未同步标识条款。行业层面，本期通报显示主要平台均已完成改造，标识核验已成为平台标配能力。", "action": "工作建议：（1）11月15日前完成发布链路标识检测改造立项（科技研发部牵头）；（2）同步修订用户协议、社区规则中的AI生成内容条款（法务合规部）；（3）纳入义务台账（YW-02），状态“未启动”，列为橙色风险（O-02）。", "source": {"org": "国家网信办", "channel": "中国网信网 › 政策文件", "pubDate": "2026-10-04", "url": null, "verified": false}}, {"id": "A3", "risk": "O-03", "level": "橙", "title": "工信部明确大模型应用安全管理要求，智能体调用链首次纳入上线前评估", "fact": "2026年10月1日，工业和信息化部发布大模型应用安全管理要求，明确上线前安全评估范围覆盖深度合成与智能体（Agent）工具调用链，包括插件调用、外部接口交互的安全评估。", "analysis": "较此前规则，本项属口径调整：将工具调用型AI功能（插件、外部API交互）明确纳入上线前安全评估范围，系监管首次明确智能体形态的评估口径。文件属部门规范性文件，评估不合格不得上线，实质构成事前准入约束。", "impact": "本项直接影响我方在研的工具调用型AI功能（触发条件：功能含插件或外部接口交互）。公司现有评估文档未包含调用链图谱与越权测试记录。该口径目前为单一文件来源，标为弱信号观察其是否上升为普遍要求（见七（二））。", "action": "工作建议：（1）修订AI功能上线评估清单，增补调用链图谱与越权测试记录两项交付物（科技研发部，10月31日前）；（2）纳入义务台账（YW-03），列为橙色风险（O-03）。", "source": {"org": "工业和信息化部", "channel": "工信部官网 › 政策文件", "pubDate": "2026-10-01", "url": null, "verified": false}}, {"id": "A4", "risk": "Y-01", "level": "黄", "title": "网信办通报算法推荐执法案例，两平台因未公示算法原理被限期整改", "fact": "2026年9月28日，国家网信办通报两起《互联网信息服务算法推荐管理规定》执法案例，案由均为未以显著方式公示算法基本原理，涉事平台被责令限期整改。", "analysis": "较此前规则，本项属执法口径确认：完成算法备案不免除公示义务。《互联网信息服务算法推荐管理规定》第十六条要求“以显著方式告知用户其提供算法推荐服务的情况，并以适当方式公示算法的基本原理、目的意图”；执法要点在于公示信息须与备案信息一致。", "impact": "本项直接影响我方推荐、排序功能页面（触发条件：平台提供算法推荐服务且已完成或应完成备案）。公司功能页尚未设置算法公示说明。", "action": "工作建议：对照备案信息补充推荐、排序功能页的算法公示说明（科技研发部与法务合规部，11月30日前）。纳入义务台账（YW-04），列为黄色风险（Y-01）。", "source": {"org": "国家网信办", "channel": "中国网信网 › 执法动态", "pubDate": "2026-09-28", "url": null, "verified": false}}]}, {"id": "D", "name": "数据要素与个人信息保护监管动态", "summary": "本章四项动态共同指向数据基础制度的执行层细化：出境路径、重要数据自评、合规审计、数据资产入表。", "closing": "综合本章，数据义务从“制度供给”转入“年度节律化履行”：出境申报（60日窗口）、重要数据自评（每年1月31日）、合规审计（年度+三年留存）形成固定时间表。三项义务的时限在2026年第四季度至2027年第一季度密集叠加，建议数据管理部统筹排期，避免资源冲突；出境路径选型（R-01）为本期最高优先级。", "items": [{"id": "D1", "risk": "R-01", "level": "红", "title": "《个人信息出境认证办法》公布，11月1日施行，存量业务申报窗口开启", "fact": "2026年10月3日，国家互联网信息办公室发布《个人信息出境认证办法》，自2026年11月1日起施行。主要内容包括：专业机构认证成为个人信息出境三条路径之一；认证机构名录与申请程序一并公布；存量业务自施行之日起60日内完成申报。", "analysis": "较此前规则，本项属体系补全：《中华人民共和国个人信息保护法》（2021年8月20日主席令第九十一号公布，自2021年11月1日起施行，以下简称《个人信息保护法》）第三十八条确立“安全评估、认证、标准合同”三路径框架，本办法将认证路径落地为可操作程序（第四条：处理者可通过国家网信部门认定的专业机构认证出境）。未按期申报的，依据《个人信息保护法》第六十六条处理，情节严重的最高可处五千万元或上一年度营业额百分之五罚款。", "impact": "本项直接影响我方涉境外节点的数据回流业务（触发条件：向境外提供个人信息且未走安全评估路径），涉及3条产品线。经初步排查，公司存量跨境传输均未完成三条路径中任何一种的合规手续，属红色风险。认证路径与标准合同路径的成本、周期对比及选型建议见可视化版报告第六区。", "action": "工作建议：（1）10月17日前完成存量跨境业务逐项盘点（数据管理部）；（2）10月31日前完成三路径选型论证并出具书面意见（法务合规部牵头）；（3）选型后立即启动申报，确保12月31日窗口关闭前完成（责任部门按选型结果确定）；（4）列为红色风险（R-01），纳入义务台账（YW-05），每周向公司领导报告进度。", "source": {"org": "国家网信办", "channel": "中国网信网 › 政策文件", "pubDate": "2026-10-03", "url": null, "verified": false}}, {"id": "D2", "risk": "O-05", "level": "橙", "title": "重要数据识别年度自评义务落地，自评报告模板发布", "fact": "2026年10月2日，国家网信办发布《网络数据安全管理条例》（2024年9月24日国务院令第790号公布，自2025年1月1日起施行）配套实施细则，发布重要数据识别自评报告模板，明确每年1月31日前完成上一年度自评并留存报告。", "analysis": "较此前规则，本项属义务可操作化：细则第十二条将《网络数据安全管理条例》中的重要数据识别义务落为年度自评报告义务，未按要求完成自评的按条例第五十八条先行整改，逾期可处罚款。", "impact": "本项直接影响我方全部数据资产（触发条件：数据处理者身份，无条件触发）。公司尚未建立重要数据目录比对台账，首次自评须以数据资产盘点为前提，工作量较大。", "action": "工作建议：10月31日前完成数据资产盘点表与行业重要数据目录的比对，形成自评底稿（数据管理部牵头，各业务线配合）。纳入义务台账（YW-06），列为橙色风险（O-05）。", "source": {"org": "国家网信办", "channel": "中国网信网 › 政策文件", "pubDate": "2026-10-02", "url": null, "verified": false}}, {"id": "D3", "risk": "O-04", "level": "橙", "title": "《个人信息保护合规审计管理办法》施行，年度强制审计义务触发", "fact": "《个人信息保护合规审计管理办法》自2026年9月30日起施行，处理超过一千万条个人信息的处理者须每年至少开展一次合规审计，审计报告及整改记录保存不少于三年。", "analysis": "较此前规则，本项属义务可操作化：办法将《个人信息保护法》第五十四条的合规审计义务落为可核查程序——规模门槛（一千万条）、频次（每年至少一次）、方式（自审或委托专业机构）、留存要求（不少于三年）四要素齐备。", "impact": "本项直接影响我方全部涉个人信息处理业务（触发条件：处理数量超一千万条，公司用户规模已达标）。首次自审尚未开展，审计底稿与整改记录归档机制待建立。", "action": "工作建议：第四季度完成首次自审立项并明确底稿归档规则（法务合规部牵头，11月15日前形成审计方案）。纳入义务台账（YW-07），列为橙色风险（O-04）。", "source": {"org": "国家网信办", "channel": "中国网信网 › 政策文件", "pubDate": "2026-09-30", "url": null, "verified": false}}, {"id": "D4", "risk": "Y-02", "level": "黄", "title": "财政部发布数据资源会计处理应用指南，数据资产入表细化为三类情形", "fact": "2026年9月29日，财政部发布企业数据资源相关会计处理应用指南，将数据资源按业务模式和持有目的细化为无形资产、存货、研发资本化三类计量情形。", "analysis": "较此前规则，本项属口径细化：指南第二条明确计量规则，但入表不改变数据权属——数据的转让与授权仍受《中华人民共和国数据安全法》（2021年9月1日起施行）第三十九条约束。", "impact": "本项对我方属机会与约束并存：平台沉淀数据产品拟入表的，须建立成本归集与减值测试台账；对外披露应避免“确权”式表述，防止误导性陈述风险。", "action": "工作建议：财务部会同数据管理部评估数据产品入表可行性，形成专项意见（2027年1月31日前）。列为黄色风险（Y-02），纳入观察清单。", "source": {"org": "财政部", "channel": "财政部官网 › 政策发布", "pubDate": "2026-09-29", "url": null, "verified": false}}]}, {"id": "P", "name": "平台经济与内容治理监管动态", "summary": "本章两项执法动态显示平台经济监管重点转向独家合作条款与SDK权限治理。", "closing": "综合本章，执法重心从大型平台的垄断行为向中小平台的具体经营动作下沉，“二选一”条款与SDK权限成为可核查的执法抓手。建议以合同模板自查与发版流程门禁两项机制性措施应对，而非个案式整改。", "items": [{"id": "P1", "risk": "Y-03", "level": "黄", "title": "市场监管总局对某平台“二选一”行为作出行政处罚", "fact": "2026年10月3日，市场监管总局依据《中华人民共和国反垄断法》第二十二条认定某平台滥用市场支配地位限定交易，作出行政处罚决定。", "analysis": "较此前规则，本项属执法延续：限定交易的认定标准未见放松，《禁止滥用市场支配地位行为规定》第十四条禁止“无正当理由限定交易相对人”，独家长期协议的“正当理由”抗辩空间有限。", "impact": "本项对我方属合同合规提示：平台撮合业务中的独家合作、排他协议模板须逐条自查（触发条件：合同含排他或独家条款）。", "action": "工作建议：11月15日前完成独家合作条款模板自查，长期独家协议增设退出机制（法务合规部）。列为黄色风险（Y-03）。", "source": {"org": "市场监管总局", "channel": "总局官网 › 执法稽查", "pubDate": "2026-10-03", "url": null, "verified": false}}, {"id": "P2", "risk": "Y-04", "level": "黄", "title": "工信部通报第N批侵害用户权益APP（SDK），37款在列", "fact": "2026年9月30日，工信部通报37款存在侵害用户权益行为的APP（SDK），高频事由为违规收集个人信息、超范围索权、强制弹窗。", "analysis": "较此前规则，本项属执法常态：通报事由与《常见类型移动互联网应用程序必要个人信息范围规定》第五条“未经用户同意不得收集与所提供服务无关的个人信息”直接对应，广告、统计类SDK的静默采集为检查重点。", "impact": "本项直接影响我方移动端发版流程（触发条件：应用集成第三方SDK）。通报下架对上架周期影响不可逆。", "action": "工作建议：发版流程增加SDK清单核对环节，集成前完成权限映射自查（科技研发部，机制长期化）。纳入义务台账（YW-08），列为黄色风险（Y-04）。", "source": {"org": "工业和信息化部", "channel": "工信部官网 › 电信管理", "pubDate": "2026-09-30", "url": null, "verified": false}}]}, {"id": "E", "name": "司法立法进程与域外监管动态", "summary": "本章收录国内在途立法两项、域外动态两项，并就AI服务监管议题作中外对照。", "closing": "综合本章，国内在途立法集中于数据确权与地方数据条例，域外呈现“中国细则密集落地、欧盟推迟施行、美国执法驱动”的节奏分化。域外规则暂无直接强制力，均列黄色观察，但欧盟推迟不改义务内容，涉欧业务准备节奏不应放松。", "items": [{"id": "E1", "risk": "Y-05", "level": "黄", "title": "最高法就数据权益保护司法解释公开征求意见", "fact": "2026年10月2日，最高人民法院就《数据权益保护司法解释（征求意见稿）》向社会公开征求意见，反馈截止日期为2026年10月17日前后。征求意见稿首次在司法层面回应数据资源持有权、加工使用权、产品经营权的界定。", "analysis": "较此前规则，本项属立法进程：征求意见稿不具拘束力，但按既往惯例正式稿与征求意见稿核心条款重合度较高，宜按“准义务”预研。", "impact": "本项对我方属诉讼策略与确权路径的前瞻变量：平台数据产品的权属界定将直接影响交易结构与维权基础。", "action": "工作建议：10月17日前组织内部评审并提交行业意见（法务合规部）。纳入立法进程跟踪表，列为黄色风险（Y-05）。", "source": {"org": "最高人民法院", "channel": "最高法官网 › 司法解释", "pubDate": "2026-10-02", "url": null, "verified": false}}, {"id": "E2", "risk": "Y-06", "level": "黄", "title": "欧盟数字简化一揽子修订推迟AI法案高风险义务施行", "fact": "2026年9月27日，欧盟通过Digital Omnibus（数字简化一揽子修订），《人工智能法》（Artificial Intelligence Act，Regulation (EU) 2024/1689，2024年8月1日生效）高风险义务推迟至2027年12月、2028年8月分批施行。", "analysis": "较此前规则，本项属时间表调整而非义务减免：高风险分类判定标准未变（所引为中译，关键义务判断以英文原文为准）。中美欧节奏对照见本报告七（三）域外对照矩阵。", "impact": "本项仅涉欧业务相关；无涉欧业务则作趋势参考。涉欧产品合规时间表相应重排，准备节奏建议保持。", "action": "工作建议：纳入域外观察清单，列为黄色风险（Y-06），每期跟踪修订进展。", "source": {"org": "欧盟官方公报", "channel": "EUR-Lex › Legislation", "pubDate": "2026-09-27", "url": null, "verified": false}}], "jurisdiction_topic": "AI服务监管节奏（中国—欧盟—美国）", "jurisdiction": [{"aspect": "核心规则", "CN": "备案+安全评估+标识三线并进（备案细化要求11-01施行）", "EU": "AI法案分阶段适用，高风险义务推迟至2027-12/2028-08", "US": "无统一联邦立法，FTC以《联邦贸易委员会法》第五节执法（算法歧视声明）"}, {"aspect": "当前状态", "CN": "细则密集落地期", "EU": "施行节奏调整期", "US": "执法驱动期"}, {"aspect": "本期动态", "CN": "备案材料标准化（四（一））", "EU": "Digital Omnibus修订通过（七（二））", "US": "FTC算法歧视执法声明"}, {"aspect": "对我方影响", "CN": "直接强制义务", "EU": "涉欧业务时间表重排", "US": "出海功能评估清单参考"}]}], "obligations": [{"id": "YW-01", "duty": "生成式AI备案：补充关键问答实测记录等清单材料", "basis": "备案细化要求第四项", "deadline": "存量过渡期至2027-05-01", "owner": "法务合规部/科技研发部", "status": "未启动", "risk": "O-01"}, {"id": "YW-02", "duty": "生成合成内容标识：发布链路嵌入核验检测", "basis": "标识办法第九条", "deadline": "建议2026-11-15前", "owner": "科技研发部", "status": "未启动", "risk": "O-02"}, {"id": "YW-03", "duty": "Agent调用链上线前安全评估（调用链图谱+越权测试）", "basis": "工信部管理要求第三部分", "deadline": "新功能上线前", "owner": "科技研发部", "status": "未启动", "risk": "O-03"}, {"id": "YW-04", "duty": "算法原理公示与备案信息一致性核对", "basis": "算法推荐管理规定第十六条", "deadline": "建议2026-11-30前", "owner": "科技研发部/法务合规部", "status": "未启动", "risk": "Y-01"}, {"id": "YW-05", "duty": "个人信息出境：三路径选型并完成存量申报", "basis": "出境认证办法第四条", "deadline": "2026-12-31前（60日窗口）", "owner": "法务合规部/数据管理部", "status": "未启动", "risk": "R-01"}, {"id": "YW-06", "duty": "重要数据识别年度自评并留存报告", "basis": "网数条例实施细则第十二条", "deadline": "每年1月31日前（首次2027-01-31）", "owner": "数据管理部", "status": "未启动", "risk": "O-05"}, {"id": "YW-07", "duty": "个人信息保护合规审计（年度，报告留存三年）", "basis": "合规审计管理办法第六条", "deadline": "每年一次（首次建议2026Q4）", "owner": "法务合规部", "status": "未启动", "risk": "O-04"}, {"id": "YW-08", "duty": "SDK权限映射自查（发版门禁机制化）", "basis": "必要个人信息范围规定第五条", "deadline": "发版流程长期化", "owner": "科技研发部", "status": "未启动", "risk": "Y-04"}], "calendar": [{"id": "RL-01", "date": "2026-10-17", "event": "数据权益司法解释征求意见截止", "type": "征求意见截止", "ref": "七（一）", "owner": "法务合规部"}, {"id": "RL-02", "date": "2026-10-31", "event": "出境路径选型书面意见完成（内部节点）", "type": "内部节点", "ref": "五（一）", "owner": "法务合规部"}, {"id": "RL-03", "date": "2026-11-01", "event": "《个人信息出境认证办法》《备案细化要求》施行", "type": "法规施行", "ref": "五（一）/四（一）", "owner": "法务合规部"}, {"id": "RL-04", "date": "2026-11-15", "event": "标识核验改造立项、独家条款自查完成（内部节点）", "type": "内部节点", "ref": "四（二）/六（一）", "owner": "科技研发部"}, {"id": "RL-05", "date": "2026-12-31", "event": "存量出境申报60日窗口关闭（预计）", "type": "申报截止", "ref": "五（一）", "owner": "法务合规部"}, {"id": "RL-06", "date": "2027-01-31", "event": "重要数据年度自评完成并留存（首个周期）", "type": "法定申报", "ref": "五（二）", "owner": "数据管理部"}], "tracks": [{"name": "数据权益保护司法解释", "level": "司法解释", "stage": "征求意见", "next": "意见截止2026-10-17，预计年内审议", "status": "预研中", "since": "总第1期"}, {"name": "沪、京数据条例修订", "level": "地方性法规", "stage": "草案", "next": "登记互认规则待正式稿明确", "status": "观察", "since": "总第1期"}, {"name": "生成式AI备案细化要求", "level": "规范性文件", "stage": "已公布未施行", "next": "2026-11-01施行", "status": "落实方案制定中", "since": "总第1期"}, {"name": "个人信息出境认证办法", "level": "部门规章", "stage": "已公布未施行", "next": "2026-11-01施行，存量申报至12-31", "status": "红色处置中", "since": "总第1期"}], "trends": {"certain": ["确定性趋势：人工智能监管从框架期进入核验期——备案实测记录、标识核验、算法公示检查三线并进，义务可检测性显著增强（证据：四（一）（二）（四），跨期观察）。"], "weak": ["弱信号（单一来源、尚无正式文件普遍化）：智能体（Agent）调用链纳入上线前评估（四（三））；数据资产登记跨地互认机制（沪京条例草案表述差异）。"], "outlook": "前瞻推演：若核验期趋势延续，预计未来六个月监管将发布备案材料抽查细则与标识核验技术规范，并出现首批“未备案AI服务”处罚案例；公司应于2027年一季度前完成AI功能合规检查点机制建设，避免集中整改。"}, "suggestions": [{"id": "J-2026-19-01", "priority": "高", "content": "启动R-01红色风险处置：10月17日前完成存量跨境业务盘点，10月31日前完成三路径选型，12月31日前完成申报", "owner": "法务合规部牵头，数据管理部配合", "deadline": "2026-12-31", "ref": "五（一）/YW-05"}, {"id": "J-2026-19-02", "priority": "高", "content": "完成AI功能备案差距自查与安全评估报告编制立项（对照GB/T 45654—2025）", "owner": "法务合规部牵头，科技研发部配合", "deadline": "2026-10-31", "ref": "四（一）/YW-01"}, {"id": "J-2026-19-03", "priority": "中", "content": "建立AI功能合规检查点机制：备案、标识、评估、公示四类义务嵌入研发流程门禁", "owner": "科技研发部牵头，法务合规部配合", "deadline": "2026-11-30", "ref": "四章章末小结"}, {"id": "J-2026-19-04", "priority": "中", "content": "第四季度完成个人信息保护合规审计首次自审立项与底稿归档规则建立", "owner": "法务合规部", "deadline": "2026-11-15", "ref": "五（三）/YW-07"}, {"id": "J-2026-19-05", "priority": "中", "content": "完成数据资产盘点与重要数据目录比对，为2027年1月首个自评周期做准备", "owner": "数据管理部", "deadline": "2026-10-31", "ref": "五（二）/YW-06"}], "index": [{"title": "生成式人工智能服务备案实施细化要求", "date": "09-28", "org": "国家网信办", "type": "规范性文件", "stage": "已公布未施行", "hit": "AI应用", "selected": true}, {"title": "人工智能生成合成内容标识办法（施行动态）", "date": "10-04", "org": "国家网信办", "type": "法规施行", "stage": "已施行", "hit": "AI应用", "selected": true}, {"title": "大模型应用安全管理要求", "date": "10-01", "org": "工信部", "type": "规范性文件", "stage": "已发布", "hit": "AI应用", "selected": true}, {"title": "算法推荐管理规定执法案例通报", "date": "09-28", "org": "国家网信办", "type": "执法动态", "stage": "执法", "hit": "AI应用", "selected": true}, {"title": "个人信息出境认证办法", "date": "10-03", "org": "国家网信办", "type": "部门规章", "stage": "已公布未施行", "hit": "数据要素", "selected": true}, {"title": "网络数据安全管理条例配套实施细则", "date": "10-02", "org": "国家网信办", "type": "规范性文件", "stage": "已发布", "hit": "数据要素", "selected": true}, {"title": "个人信息保护合规审计管理办法", "date": "09-30", "org": "国家网信办", "type": "部门规章", "stage": "已施行", "hit": "数据要素", "selected": true}, {"title": "企业数据资源会计处理应用指南", "date": "09-29", "org": "财政部", "type": "政策文件", "stage": "已发布", "hit": "数据要素", "selected": true}, {"title": "“二选一”行政处罚决定", "date": "10-03", "org": "市场监管总局", "type": "执法动态", "stage": "执法", "hit": "平台经济", "selected": true}, {"title": "侵害用户权益APP（SDK）通报第N批", "date": "09-30", "org": "工信部", "type": "执法动态", "stage": "执法", "hit": "平台经济", "selected": true}, {"title": "数据权益保护司法解释（征求意见稿）", "date": "10-02", "org": "最高人民法院", "type": "司法解释", "stage": "征求意见", "hit": "司法立法", "selected": true}, {"title": "Digital Omnibus（AI法案修订）", "date": "09-27", "org": "欧盟官方公报", "type": "域外规则", "stage": "修订施行", "hit": "域外", "selected": true}, {"title": "FTC算法歧视执法政策声明", "date": "09-26", "org": "美国FTC", "type": "域外规则", "stage": "执法立场", "hit": "域外", "selected": true}, {"title": "沪、京数据条例修订草案", "date": "10-01", "org": "沪京人大", "type": "地方性法规", "stage": "草案", "hit": "数据要素", "selected": false}, {"title": "DeepSeek开源新一代多模态模型", "date": "10-04", "org": "GitHub/机器之心", "type": "技术动态", "stage": "—", "hit": "AI应用", "selected": false}, {"title": "开源AI Agent编排框架趋势", "date": "10-03", "org": "aihot.news", "type": "技术动态", "stage": "—", "hit": "AI应用", "selected": false}], "sources_list": ["中国政府网（www.gov.cn）｜国务院政策文件库、国家规章库", "中国网信网（www.cac.gov.cn）｜政策文件、执法动态、数据治理", "工信部（www.miit.gov.cn）｜政策文件、电信管理", "国家数据局（www.nda.gov.cn）｜公共数据、数据要素", "市场监管总局（www.samr.gov.cn）｜反垄断执法", "最高人民法院（www.court.gov.cn）｜司法解释、权威发布", "财政部（www.mof.gov.cn）｜会计准则", "全国标准信息公共服务平台（std.samr.gov.cn）｜国标", "EUR-Lex（eur-lex.europa.eu）｜欧盟官方公报", "美国FTC（ftc.gov）｜执法声明"]}, "riskXY": {"A1": [4, 4], "A2": [4, 3], "A3": [3, 3], "A4": [2, 3], "D1": [3, 4], "D2": [2, 3], "D3": [3, 2], "D4": [1, 2], "P1": [2, 2], "P2": [2, 2], "E1": [1, 2], "E2": [1, 1]}}</script>
+<script>
+const D = JSON.parse(document.getElementById('viz-data').textContent);
+const R = D.report, XY = D.riskXY;
+const $ = s => document.querySelector(s);
+const esc = t => String(t==null?'':t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pill = (txt,cls)=>'<span class="pill '+cls+'">'+esc(txt)+'</span>';
+const lvlCls = l => l==='红'?'red':(l==='橙'?'org':'yel');
+const days = dd => Math.round((new Date(dd)-new Date('2026-10-05'))/86400000);
+
+/* ===== 封面 + 统计 ===== */
+$('#cv-title').textContent = R.meta.title+' · 可视化版';
+$('#cv-sub').textContent = R.meta.issue+' ｜ 监测窗口 '+R.meta.window+' ｜ 截至 '+R.meta.cutoff.replace('本期信息截至','');
+const items = R.chapters.reduce((a,c)=>a.concat(c.items),[]);
+const nRed = R.risk_alerts.filter(a=>a.level==='红色').length;
+const nOrg = R.risk_alerts.filter(a=>a.level==='橙色').length;
+$('#stats').innerHTML = [
+ ['92','采集动态',''],['33','入选解读',''],['12','深度解读',''],
+ [String(nRed),'红色风险','red'],[String(nOrg),'橙色风险','org'],['7','黄色观察',''],['6','执法动态',''],['8','登记义务','']
+].map(x=>'<div class="bs"><div class="n '+x[2]+'">'+x[0]+'</div><div class="l">'+x[1]+'</div></div>').join('');
+
+/* ===== 01 总体态势 ===== */
+$('#s1-lead').textContent = R.overview.stats_para;
+const st=[['红',nRed,'#c05a42'],['橙',nOrg,'#c07a2a'],['黄',7,'#8a969a']], tot=nRed+nOrg+7;
+$('#riskstack').innerHTML = st.map(s=>'<div style="width:'+(s[1]/tot*100)+'%;background:'+s[2]+'">'+s[1]+'</div>').join('');
+$('#risklegend').innerHTML = st.map(s=>'<span><i style="background:'+s[2]+'"></i>'+s[0]+'色 '+s[1]+' 件</span>').join('');
+$('#mainlines').innerHTML = '<b style="color:var(--ink)">本期监管主线</b>'+R.overview.mainlines.map((m,i)=>'<div style="margin-top:6px">'+(i+1)+'. '+esc(m)+'</div>').join('');
+(function(){
+  const themeN=[['人工智能与算法',4,'#b8873a'],['数据要素与个保',4,'#c05a42'],['平台经济',2,'#3d7a52'],['司法立法与域外',2,'#8a969a']];
+  const C=389.4; let acc=0, segs=[];
+  themeN.forEach(t=>{const len=t[1]/12*C; segs.push([len,acc,t[2]]); acc+=len;});
+  $('#donut').innerHTML = segs.map(s=>'<circle cx="80" cy="80" r="62" fill="none" stroke="'+s[2]+'" stroke-width="24" stroke-dasharray="'+s[0]+' '+(C-s[0])+'" stroke-dashoffset="'+(-s[1])+'" transform="rotate(-90 80 80)"/>').join('')
+   + '<text x="80" y="77" text-anchor="middle" font-size="26" font-weight="700" fill="#13191c">12</text><text x="80" y="95" text-anchor="middle" font-size="10" fill="#8a969a">深度解读</text>';
+  $('#donutlegend').innerHTML = themeN.map(t=>'<span><i style="background:'+t[2]+'"></i>'+t[0]+' '+t[1]+'</span>').join('');
+})();
+
+/* ===== 02 风险矩阵 ===== */
+(function(){
+  const cell=74,x0=90,y0=30; let g='';
+  for(let L=1;L<=5;L++)for(let I=1;I<=5;I++){
+    const sc=L+I, fill=sc<=4?'#eaf3ec':(sc<=6?'#f5eedd':(sc<=8?'#fae9e4':'#f6d5cb'));
+    g+='<rect x="'+(x0+(L-1)*cell)+'" y="'+(y0+(5-I)*cell)+'" width="'+cell+'" height="'+cell+'" fill="'+fill+'" stroke="#fff" stroke-width="2"/>';}
+  [1,2,3,4,5].forEach(i=>{
+    g+='<text x="'+(x0+(i-.5)*cell)+'" y="'+(y0+5*cell+16)+'" font-size="11" fill="#8a969a" text-anchor="middle">'+i+'</text>';
+    g+='<text x="'+(x0-18)+'" y="'+(y0+(5-i)*cell+cell/2+4)+'" font-size="11" fill="#8a969a" text-anchor="middle">'+i+'</text>';});
+  g+='<text x="'+(x0+2.5*cell)+'" y="'+(y0+5*cell+36)+'" font-size="12" fill="#5b6b70" text-anchor="middle">发生可能性 →</text>';
+  g+='<text x="28" y="'+(y0+2.5*cell)+'" font-size="12" fill="#5b6b70" text-anchor="middle" transform="rotate(-90 28 '+(y0+2.5*cell)+')">影响程度 →</text>';
+  g+='<text x="'+(x0+4.5*cell)+'" y="20" font-size="11" fill="#c05a42" text-anchor="end">优先处置区</text>';
+  g+='<text x="'+(x0+6)+'" y="'+(y0+5*cell-8)+'" font-size="11" fill="#8a969a">持续观察区</text>';
+  const cnt={};
+  items.forEach(it=>{
+    const k=XY[it.id].join(','); cnt[k]=(cnt[k]||0); const idx=cnt[k]++;
+    const off=[[0,0],[-20,0],[20,0],[0,-20],[0,20]][idx]||[0,0];
+    const cx=x0+(XY[it.id][0]-1)*cell+cell/2+off[0], cy=y0+(5-XY[it.id][1])*cell+cell/2+off[1];
+    const col=it.level==='红'?'#c05a42':(it.level==='橙'?'#b8873a':'#8a969a');
+    g+='<circle cx="'+cx+'" cy="'+cy+'" r="12" fill="'+col+'" stroke="#fff" stroke-width="2"/><text x="'+cx+'" y="'+(cy+3.5)+'" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="700">'+it.id+'</text>';});
+  $('#matrix').innerHTML=g;
+})();
+$('#risktable').innerHTML='<tr><th>编号</th><th>等级</th><th>风险事项</th><th>处置时限</th><th>处置要求</th></tr>'+
+ R.risk_alerts.map(a=>'<tr><td><b>'+a.id+'</b></td><td>'+pill(a.level,lvlCls(a.level))+'</td><td>'+esc(a.title)+'</td><td>'+esc(a.deadline)+'</td><td>'+esc(a.action)+'</td></tr>').join('');
+
+/* ===== 03 义务表（排序+过滤） ===== */
+(function(){
+  const T=$('#obligtable');
+  T.innerHTML='<tr><th>编号</th><th>义务事项</th><th>依据</th><th class="sortable" data-key="dl">履行时限 ▾</th><th>责任条线</th><th class="sortable" data-key="st">状态</th><th>风险</th></tr>'+
+   R.obligations.map(o=>{const m=String(o.deadline).match(/\d{4}-\d{2}-\d{2}/); const dd=m?days(m[0]):9999;
+    return '<tr data-dl="'+(m?m[0]:'9999')+'" data-st="'+esc(o.status)+'" data-dd="'+dd+'"><td>'+o.id+'</td><td>'+esc(o.duty)+'</td><td>'+esc(o.basis)+'</td><td class="dead">'+esc(o.deadline)+(dd<=30?' '+pill(dd+'天','soon'):'')+'</td><td>'+esc(o.owner)+'</td><td>'+pill(o.status,o.status==='未启动'?'yel':'grn')+'</td><td>'+o.risk+'</td></tr>';}).join('');
+  T.querySelectorAll('th.sortable').forEach(th=>th.addEventListener('click',()=>{
+    const k=th.dataset.key, asc=T.dataset.sort!=='k'+k; T.dataset.sort='k'+k;
+    Array.from(T.tBodies[0].rows).sort((a,b)=>String(a.dataset[k]).localeCompare(String(b.dataset[k]),'zh')*(asc?1:-1)).forEach(r=>T.tBodies[0].appendChild(r));}));
+  const defs=[['全部',r=>true],['90天内',r=>+r.dataset.dd<=90],['未启动',r=>r.dataset.st==='未启动']];
+  $('#oblig-chips').innerHTML=defs.map((d,i)=>'<span class="chip'+(i===0?' on':'')+'">'+d[0]+'</span>').join('');
+  $('#oblig-chips').addEventListener('click',e=>{
+    if(!e.target.classList.contains('chip'))return;
+    document.querySelectorAll('#oblig-chips .chip').forEach(x=>x.classList.toggle('on',x===e.target));
+    const i=Array.prototype.indexOf.call(document.querySelectorAll('#oblig-chips .chip'),e.target);
+    Array.from(T.tBodies[0].rows).forEach(r=>r.style.display=defs[i][1](r)?'':'none');});
+})();
+
+/* ===== 04 时间轴 ===== */
+(function(){
+  const x=d=>80+days(d)*6, T0='2026-10-05'; let g='';
+  g+='<rect x="80" y="52" width="'+(x('2026-11-04')-80)+'" height="250" fill="#fae9e4" opacity=".35"/>';
+  [['2026-11-01','11月'],['2026-12-01','12月'],['2027-01-01','1月'],['2027-02-01','2月']].forEach(m=>{
+    g+='<line x1="'+x(m[0])+'" y1="52" x2="'+x(m[0])+'" y2="302" stroke="#e5e7eb"/><text x="'+x(m[0])+'" y="44" font-size="11" fill="#8a969a" text-anchor="middle">'+m[1]+'</text>';});
+  g+='<line x1="80" y1="46" x2="80" y2="308" stroke="#b8873a" stroke-dasharray="4 4" stroke-width="2"/><text x="80" y="40" font-size="11" fill="#b8873a" text-anchor="middle" font-weight="700">今天 10-05</text>';
+  R.calendar.forEach((c,i)=>{
+    const y=88+i*36;
+    g+='<text x="74" y="'+(y+4)+'" font-size="10.5" fill="#5b6b70" text-anchor="end">'+esc(c.id+' '+c.event.slice(0,10))+'</text>';
+    g+='<line x1="80" y1="'+y+'" x2="840" y2="'+y+'" stroke="#eef1ed"/>';
+    const cx=x(c.date), dd=days(c.date), col=dd<=30?'#c05a42':(dd<=60?'#b8873a':'#5b6b70');
+    g+='<circle cx="'+cx+'" cy="'+y+'" r="7" fill="'+col+'" stroke="#fff" stroke-width="2"/>';
+    g+='<text x="'+cx+'" y="'+(y-12)+'" font-size="10" fill="'+col+'" text-anchor="middle" font-weight="700">'+c.date.slice(5)+' · '+dd+'天</text>';
+    if(i<R.calendar.length-1){const nx=x(R.calendar[i+1].date);
+      g+='<rect x="'+cx+'" y="'+(y+7)+'" width="'+Math.max(4,nx-cx)+'" height="6" rx="3" fill="#b8873a" opacity=".2"/>';}
+  });
+  g+='<text x="840" y="322" font-size="10" fill="#8a969a" text-anchor="end">窗口：2026-10-05 ~ 2027-02（120天）· 超窗节点（EU 2027-12）见域外对照</text>';
+  $('#timeline').innerHTML=g;
+})();
+$('#caltable').innerHTML='<tr><th>日期</th><th>倒计时</th><th>事项</th><th>类型</th><th>关联条目</th><th>责任条线</th></tr>'+
+ R.calendar.map(c=>{const dd=days(c.date); return '<tr><td class="dead">'+c.date+'</td><td>'+(dd<=30?pill(dd+'天','soon'):pill(dd+'天','yel'))+'</td><td>'+esc(c.event)+'</td><td>'+esc(c.type)+'</td><td>'+esc(c.ref)+'</td><td>'+esc(c.owner)+'</td></tr>';}).join('');
+
+/* ===== 05 判断树 + 三路径 + 域外 ===== */
+(function(){
+  const R0='#c05a42', G='#3d7a52', GD='#b8873a', INK='#202a2f';
+  function box(x,y,w,h,txt,fill,stroke){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="8" fill="'+fill+'" stroke="'+stroke+'" stroke-width="1.5"/><text x="'+(x+w/2)+'" y="'+(y+h/2+4)+'" font-size="11" fill="'+INK+'" text-anchor="middle">'+txt+'</text>';}
+  function dia(cx,cy,w,h,txt){return '<path d="M'+cx+','+(cy-h/2)+' L'+(cx+w/2)+','+cy+' L'+cx+','+(cy+h/2)+' L'+(cx-w/2)+','+cy+' Z" fill="#fdfdfb" stroke="#b8873a" stroke-width="1.5"/><text x="'+cx+'" y="'+(cy+4)+'" font-size="10.5" text-anchor="middle" fill="#202a2f">'+txt+'</text>';}
+  function arr(x1,y1,x2,y2,label){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#8a969a" stroke-width="1.3" marker-end="url(#arw)"/>'+(label?'<text x="'+((x1+x2)/2)+'" y="'+((y1+y2)/2-5)+'" font-size="10" fill="#8a969a" text-anchor="middle">'+label+'</text>':'');}
+  let g='<defs><marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8a969a"/></marker></defs>';
+  g+=box(120,8,190,34,'向境外提供个人信息？','#f5eedd','#b8873a');
+  g+=dia(215,95,170,44,'关基运营者／重要数据？');
+  g+=arr(215,42,215,71,'');
+  g+=box(15,170,130,34,'安全评估','#fae9e4',R0);
+  g+=arr(140,95,85,168,'是');
+  g+=dia(300,190,170,44,'数量超门槛？<br>(100万/10万敏感)');
+  g=g.replace('数量超门槛？<br>(100万/10万敏感)','数量超门槛?');
+  g+=arr(272,106,330,166,'否');
+  g+=box(330,120,90,26,'','#fff','#fff');
+  g+=arr(300,212,215,262,'是');
+  g+=box(240,262,120,34,'安全评估','#fae9e4',R0);
+  g+=box(15,262,105,34,'认证','#eaf3ec',G); g+=box(130,262,105,34,'标准合同','#eaf3ec',G);
+  g+=arr(320,212,90,258,'否');
+  g+='<text x="215" y="305" font-size="10" fill="#8a969a" text-anchor="middle">存量业务：施行后60日内完成申报（R-01 · 12-31 前）</text>';
+  $('#tree').innerHTML=g;
+})();
+$('#pathstable').innerHTML='<tr><th>路径</th><th>适用情形</th><th>关键材料</th><th>法定时限</th><th>报告建议</th></tr>'+
+ '<tr><td><b>安全评估</b></td><td>关基运营者／重要数据／数量超门槛</td><td>自评估报告+申报表</td><td>申报后出境前</td><td rowspan="3" style="background:var(--goldsoft)">存量三产品线建议优先<b>认证或标准合同</b>（不涉关基与重要数据；认证成本8-15万/线，标准合同备案成本更低），10-31前完成选型（J-2026-19-01）</td></tr>'+
+ '<tr><td><b>认证</b></td><td>一般处理者（不落评估情形）</td><td>认证申请+专业机构认证</td><td>施行后60日内</td></tr>'+
+ '<tr><td><b>标准合同</b></td><td>一般处理者（非敏感大量）</td><td>标准合同+备案+PIA</td><td>合同生效前备案</td></tr>';
+const ech=R.chapters[R.chapters.length-1];
+if(ech.jurisdiction){
+  $('#jur-title').textContent='域外对照：'+ech.jurisdiction_topic;
+  $('#jurtable').innerHTML='<tr><th>维度</th><th style="background:#fae5d8">中国</th><th style="background:#e8ecf5">欧盟</th><th style="background:#e9f0e5">美国</th></tr>'+
+   ech.jurisdiction.map(r=>'<tr><td><b>'+esc(r.aspect)+'</b></td><td>'+esc(r.CN)+'</td><td>'+esc(r.EU)+'</td><td>'+esc(r.US)+'</td></tr>').join('');
+}
+
+/* ===== 06 条目章 ===== */
+(function(){
+  const names={A:'一',D:'二',P:'三',E:'四'};
+  $('#chapters').innerHTML=R.chapters.map((ch,ci)=>
+   '<div class="chap-h serif">'+names[ch.id]+'、'+esc(ch.name)+' <span class="cnt">'+ch.items.length+' 件 · '+esc(ch.summary)+'</span></div>'+
+   ch.items.map(it=>'<div class="entry lv-'+lvlCls(it.level)+'">'+
+     '<div class="t">'+esc(it.title)+'</div>'+
+     '<div class="m">'+pill(it.id+' · '+it.risk, it.level==='红'?'red':(it.level==='橙'?'org':'yel'))+
+       pill(it.level+'色','')+'<span>'+esc(it.source.org)+'</span><span>'+esc(it.source.pubDate)+'</span></div>'+
+     '<details><summary>展开四段式完整解读（概况 · 合规分析 · 影响评估 · 工作建议）</summary>'+
+       '<div class="seg"><span class="sk">1.事项概况</span><br>'+esc(it.fact)+'</div>'+
+       '<div class="seg"><span class="sk">2.合规分析</span><br>'+esc(it.analysis)+'</div>'+
+       '<div class="seg"><span class="sk">3.影响评估</span><br>'+esc(it.impact)+'</div>'+
+       '<div class="seg"><span class="sk">4.工作建议</span><br>'+esc(it.action)+'</div></details>'+
+     '<div class="src">来源：'+esc(it.source.channel)+'（'+esc(it.source.org)+'，'+esc(it.source.pubDate)+'发布）· 原文直链待正式版核验后附</div></div>').join('')+
+   '<div class="closing"><b>本章小结：</b>'+esc(ch.closing)+'</div>').join('');
+})();
+
+/* ===== 07 建议 / 08 索引 / 脚注 ===== */
+$('#sugtable').innerHTML='<tr><th>编号</th><th>优先级</th><th>建议内容</th><th>责任部门</th><th>时限</th><th>关联</th></tr>'+
+ R.suggestions.map(s=>'<tr><td>'+s.id.slice(-2)+'</td><td>'+pill(s.priority, s.priority==='高'?'red':'org')+'</td><td>'+esc(s.content)+'</td><td>'+esc(s.owner)+'</td><td class="dead">'+esc(s.deadline)+'</td><td>'+esc(s.ref)+'</td></tr>').join('');
+$('#idxtable').innerHTML='<tr><th>#</th><th>文件/事项</th><th>日期</th><th>机关</th><th>类型</th><th>阶段</th><th>命中业务线</th><th>入选</th></tr>'+
+ R.index.map((r,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(r.title)+'</td><td class="dead">'+r.date+'</td><td>'+esc(r.org)+'</td><td>'+esc(r.type)+'</td><td>'+esc(r.stage)+'</td><td>'+esc(r.hit)+'</td><td>'+(r.selected?pill('是','grn'):pill('否','yel'))+'</td></tr>').join('');
+$('#foot').innerHTML='合规洞察工具自动生成 · 系统初筛+法务复核双签 · 演示样例<br>'+R.meta.issue+' · 窗口 '+R.meta.window+' · 编制规范 V2.0';
+
+/* ===== TOC + scrollspy + 打印 ===== */
+(function(){
+  const secs=[...document.querySelectorAll('section[data-t]')];
+  $('#toc').insertAdjacentHTML('beforeend',secs.map(s=>'<a href="#'+s.id+'">'+s.dataset.t+'</a>').join(''));
+  const links=[...document.querySelectorAll('.toc a')];
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+    links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id));}});},
+    {rootMargin:'-30% 0px -60% 0px'});
+  secs.forEach(s=>io.observe(s));
+  window.addEventListener('beforeprint',()=>document.querySelectorAll('details').forEach(d=>d.open=true));
+})();
+</script>
+</body>
+</html>
