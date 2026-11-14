@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>综合监管动态 · 合规洞察报告（可视化版）</title>
+<style>
+:root{--bg:#faf9f6;--ink:#13191c;--sub:#5b6b70;--faint:#8a969a;--line:#dfe4e1;--gold:#b8873a;
+--gold-soft:#f5eedd;--coral:#d86a52;--coral-deep:#b3402a;--card:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:14px;line-height:1.75}
+a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px 80px}
+.cover{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);
+border-radius:0 0 14px 14px;padding:44px 40px 34px;text-align:center;margin-bottom:18px}
+.cover .kicker{font-size:12px;letter-spacing:6px;color:var(--gold);font-weight:700}
+.cover h1{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;line-height:1.45;margin:14px 0 4px;letter-spacing:.5px}
+.cover h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:22px;font-weight:700;letter-spacing:4px}
+.cover .issue{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:15px;color:var(--sub);margin-top:10px}
+.cover .meta{font-size:12.5px;color:var(--faint);margin-top:6px}
+.mode{display:inline-block;margin-top:14px;font-size:12px;border-radius:999px;padding:3px 12px;font-weight:700}
+.mode.warn{background:#fae9e4;color:var(--coral-deep)} .mode.ok{background:#eaf3ec;color:#3d7a52}
+.warn{background:#fae9e4;border:1px solid #f0c4b9;color:#8f3220;border-radius:10px;
+padding:12px 16px;font-size:13px;line-height:1.8;margin:0 0 18px;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.stat-n{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;font-weight:700;color:var(--gold)}
+.stat-l{font-size:12.5px;font-weight:700;margin-top:2px}
+.stat-s{font-size:11px;color:var(--faint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.card h2,.chapter h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cnt{font-size:12px;color:var(--faint);font-weight:400}
+.figcap{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.7}
+.note{font-size:11.5px;color:var(--coral-deep);background:#fae9e4;border-radius:8px;padding:6px 10px;margin-top:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+.item header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px}
+.meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--sub)}
+.badge{background:var(--ink);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700}
+.score{color:var(--gold);font-weight:800;font-size:14px}
+.tag{background:var(--gold-soft);color:var(--gold);border-radius:5px;padding:1px 8px;font-weight:600}
+.veri{border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.chip{border:1px solid var(--line);background:#f7f8f6;border-radius:999px;padding:1px 9px;font-size:11px;color:var(--sub)}
+.item h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:17.5px;line-height:1.6;margin-top:9px}
+.blk{margin-bottom:13px}
+.lab{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.blk p{font-size:13.5px;color:#202a2f;text-align:justify}
+.blk ul{font-size:13.5px;padding-left:20px;color:#202a2f}
+.blk li{margin-bottom:4px}
+.blk.tech{background:#f7f8f6;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.quote{background:#eaf3ec;border-left:3px solid #3d7a52;padding:9px 13px;border-radius:0 8px 8px 0;
+font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:13px;color:#2f5f40;margin-bottom:8px}
+.quote .loc{display:block;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:11px;color:#5f8a6d;margin-top:4px}
+.cite{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;padding:6px 0;
+border-bottom:1px dashed var(--line)}
+.tag.ok{background:#eaf3ec;color:#3d7a52} .tag.warn{background:var(--gold-soft);color:var(--gold)}
+.tag{border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.srcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;
+border-top:1px dashed var(--line);padding-top:11px}
+.srcbtn{background:var(--gold);color:#fff;border-radius:8px;padding:7px 15px;font-size:13px;font-weight:600}
+.srcbtn:hover{filter:brightness(.94);text-decoration:none}
+.srcbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.muted{color:var(--faint)}
+.empty{padding:34px;text-align:center;color:var(--sub)}
+.excl{font-size:12.5px;color:var(--sub);padding-left:20px;line-height:1.9}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f2f4f1;font-weight:700}
+td.t{max-width:340px}
+tr.out td{color:var(--faint)}
+.h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;margin:18px 0 8px}
+.notebox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;font-size:13px;color:var(--sub)}
+.notebox h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;color:var(--ink);margin-bottom:8px}
+.notebox p{margin-bottom:8px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.cover{padding:30px 20px}}
+@media print{body{background:#fff}.card,.item,.cover,.stat{break-inside:avoid}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+
+<div class="cover">
+  <div class="kicker">合规洞察 · 可视化版</div>
+  <h1>综合监管动态</h1>
+  <h2>合规洞察报告</h2>
+  <div class="issue">（未编号期次）</div>
+  <div class="meta">监测窗口：2026年10月30日至2026年11月13日 ｜ 本期信息截至2026年11月13日 ｜ 生成时间：2026-11-13 07:53</div>
+  <div class="meta">报告模式：演示/工作稿（含待核验条目）</div>
+  <span class="mode warn">含待核验条目</span>
+</div>
+
+<div class="warn">本报告为**含待核验条目的演示/工作稿**：窗口内 7 条尚未完成原文核验，全部条目已逐条标注「待核验·演示内容」，未经核验不得对外作为当期监管动态引用；切换正式模式后这 7 条将被排除。</div>
+
+<div class="stats"><div class="stat"><div class="stat-n">7</div><div class="stat-l">窗口内条目</div><div class="stat-s">回溯窗口全部条目</div></div><div class="stat"><div class="stat-n">0</div><div class="stat-l">自动入选</div><div class="stat-s">相关度阈值 55</div></div><div class="stat"><div class="stat-n">7</div><div class="stat-l">未核验/演示</div><div class="stat-s">正式模式将排除</div></div><div class="stat"><div class="stat-n">0</div><div class="stat-l">平均相关度</div><div class="stat-s">入选条目均分</div></div></div>
+
+<div class="card">
+  <h2>窗口内条目趋势</h2>
+  <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="窗口内每日条目趋势"><rect width="720" height="240" fill="#ffffff"/><line x1="46" y1="186.0" x2="700" y2="186.0" stroke="#dfe4e1"/><text x="38" y="190.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="147.0" x2="700" y2="147.0" stroke="#dfe4e1"/><text x="38" y="151.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="108.0" x2="700" y2="108.0" stroke="#dfe4e1"/><text x="38" y="112.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="69.0" x2="700" y2="69.0" stroke="#dfe4e1"/><text x="38" y="73.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="30.0" x2="700" y2="30.0" stroke="#dfe4e1"/><text x="38" y="34.0" text-anchor="end" font-size="10" fill="#5b6b70">1</text><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="67.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-30</text><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="143.7" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="143.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="155.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-01</text><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="230.9" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="242.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-03</text><rect x="274.5" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="274.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="318.1" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="318.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="329.4" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-05</text><rect x="361.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="361.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="416.6" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-07</text><rect x="448.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="448.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="492.5" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="492.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="503.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-09</text><rect x="536.1" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="536.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="579.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="579.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="591.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-11</text><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="666.9" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="666.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="678.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">11-13</text><rect x="46" y="210" width="10" height="10" fill="#b8873a" opacity=".35" rx="2"/><text x="61" y="219" font-size="10.5" fill="#5b6b70">窗口内全部条目</text><rect x="176" y="210" width="10" height="10" fill="#b8873a" rx="2"/><text x="191" y="219" font-size="10.5" fill="#5b6b70">自动入选条目</text></svg>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<div class="card">
+  <h2>入选条目类型分布</h2>
+  <p class='muted'>暂无类型分布</p>
+  <h2 style="margin-top:18px">命中业务线分布（内部评分口径，不含公司身份信息）</h2>
+  <p class='muted'>暂无业务线分布</p>
+  <div class="figcap">业务线为相关度评分的内部权重维度，用于排序，不代表已确认的业务事实。</div>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<section class="chapter"><div class="empty">本期窗口内无满足入选条件的条目，按规则不硬凑内容。</div></section>
+
+<div class="card">
+  <h2>下一步工作建议</h2>
+  <ol class="excl"><li class='muted'>无可自动汇总的建议。</li></ol>
+  <div class="figcap">以上为按入选条目自动汇总的跟踪提示，落实情况需人工确认，本报告不主张任何事项已完成。</div>
+</div>
+
+<div class="card">
+  <h2>附录：本期信息索引（含未入选条目）</h2>
+  <table><thead><tr><th>#</th><th>标题</th><th>日期</th><th>类型</th><th>发布主体</th>
+  <th>相关度</th><th>核验状态</th><th>结果</th></tr></thead><tbody><tr class="out"><td>1</td><td class="t">2026-11-13 关于下达14项网络安全推荐性国家标准计划的通知</td><td>2026-11-13</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>54</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>2</td><td class="t">10月份数据出炉，当前物价运行态势如何？</td><td>2026-11-10</td><td>政策文件</td><td>中国政府网</td><td>52</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>3</td><td class="t">纵慧芯光提交IPO辅导备案，启动科创板上市辅导</td><td>2026-11-05</td><td>行业动态</td><td>澎湃新闻</td><td>44</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>4</td><td class="t">国家发改委答澎湃：密切关注人工智能对就业结构影响，激发其在创造新就业岗位、带动创新创业方面的活力</td><td>2026-11-03</td><td>行业动态</td><td>澎湃新闻</td><td>43</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>5</td><td class="t">渣打连续第九年亮相进博会，以跨境金融“连接器”助科创出海</td><td>2026-11-09</td><td>行业动态</td><td>澎湃新闻</td><td>42</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>6</td><td class="t">国产大模型再上新：混元Hy4正式发布，腾讯称首次进入最强开源模型梯队</td><td>2026-11-04</td><td>行业动态</td><td>澎湃新闻</td><td>38</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>7</td><td class="t">硅基流动赴港IPO备案申请状态显示为“已接收”，拟冲刺“AI Token工厂第一股”</td><td>2026-11-01</td><td>行业动态</td><td>澎湃新闻</td><td>38</td><td>待核验</td><td>未入选</td></tr></tbody></table>
+  <h3>排除清单（7 条，如实列示）</h3><ul class="excl"><li><b>2026-11-13 关于下达14项网络安全推荐性国家标准计划的通知</b>（54 分）— 相关度 54 低于阈值 55</li><li><b>10月份数据出炉，当前物价运行态势如何？</b>（52 分）— 相关度 52 低于阈值 55</li><li><b>纵慧芯光提交IPO辅导备案，启动科创板上市辅导</b>（44 分）— 相关度 44 低于阈值 55</li><li><b>国家发改委答澎湃：密切关注人工智能对就业结构影响，激发其在创造新就业岗位、带动创新创业方面的活力</b>（43 分）— 相关度 43 低于阈值 55</li><li><b>渣打连续第九年亮相进博会，以跨境金融“连接器”助科创出海</b>（42 分）— 相关度 42 低于阈值 55</li><li><b>国产大模型再上新：混元Hy4正式发布，腾讯称首次进入最强开源模型梯队</b>（38 分）— 相关度 38 低于阈值 55</li><li><b>硅基流动赴港IPO备案申请状态显示为“已接收”，拟冲刺“AI Token工厂第一股”</b>（38 分）— 相关度 38 低于阈值 55</li></ul>
+</div>
+
+<div class="notebox">
+  <h3>编制说明与真实性声明</h3>
+  <p>1. 选取方式：2026年10月30日至2026年11月13日（回溯 15 天）窗口内共
+     7 条，按相关度 ≥55 自动选取
+     0 条，未设逐条勾选或"确认入报告"。</p>
+  <p>2. 排除情况：共排除 7 条，其中未核验/演示
+     0 条、低于阈值 7 条；
+     正式模式下未核验条目一律不入报。</p>
+  <p>3. 日期口径：日期口径：本期无入选条目。</p>
+  <p>4. 数据口径：示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用；图表由本报告数据实时生成，未引用任何外部官方统计。</p>
+  <p>5. 免责：本报告由合规洞察工具自动生成，其中的解读与建议为工具生成的分析参考，不构成法律意见；规范依据以官方发布文本为准，未能核验的依据未在本报告中声称已核对。</p>
+  
+  <p class="muted">生成时间 2026-11-13 07:53 · 文本版（Word）与本可视化版由同一份报告模型渲染，内容同源。</p>
+</div>
+
+</div></body></html>

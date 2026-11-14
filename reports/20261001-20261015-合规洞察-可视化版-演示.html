@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>综合监管动态 · 合规洞察报告（可视化版）</title>
+<style>
+:root{--bg:#faf9f6;--ink:#13191c;--sub:#5b6b70;--faint:#8a969a;--line:#dfe4e1;--gold:#b8873a;
+--gold-soft:#f5eedd;--coral:#d86a52;--coral-deep:#b3402a;--card:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:14px;line-height:1.75}
+a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px 80px}
+.cover{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);
+border-radius:0 0 14px 14px;padding:44px 40px 34px;text-align:center;margin-bottom:18px}
+.cover .kicker{font-size:12px;letter-spacing:6px;color:var(--gold);font-weight:700}
+.cover h1{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;line-height:1.45;margin:14px 0 4px;letter-spacing:.5px}
+.cover h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:22px;font-weight:700;letter-spacing:4px}
+.cover .issue{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:15px;color:var(--sub);margin-top:10px}
+.cover .meta{font-size:12.5px;color:var(--faint);margin-top:6px}
+.mode{display:inline-block;margin-top:14px;font-size:12px;border-radius:999px;padding:3px 12px;font-weight:700}
+.mode.warn{background:#fae9e4;color:var(--coral-deep)} .mode.ok{background:#eaf3ec;color:#3d7a52}
+.warn{background:#fae9e4;border:1px solid #f0c4b9;color:#8f3220;border-radius:10px;
+padding:12px 16px;font-size:13px;line-height:1.8;margin:0 0 18px;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.stat-n{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;font-weight:700;color:var(--gold)}
+.stat-l{font-size:12.5px;font-weight:700;margin-top:2px}
+.stat-s{font-size:11px;color:var(--faint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.card h2,.chapter h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cnt{font-size:12px;color:var(--faint);font-weight:400}
+.figcap{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.7}
+.note{font-size:11.5px;color:var(--coral-deep);background:#fae9e4;border-radius:8px;padding:6px 10px;margin-top:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+.item header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px}
+.meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--sub)}
+.badge{background:var(--ink);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700}
+.score{color:var(--gold);font-weight:800;font-size:14px}
+.tag{background:var(--gold-soft);color:var(--gold);border-radius:5px;padding:1px 8px;font-weight:600}
+.veri{border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.chip{border:1px solid var(--line);background:#f7f8f6;border-radius:999px;padding:1px 9px;font-size:11px;color:var(--sub)}
+.item h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:17.5px;line-height:1.6;margin-top:9px}
+.blk{margin-bottom:13px}
+.lab{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.blk p{font-size:13.5px;color:#202a2f;text-align:justify}
+.blk ul{font-size:13.5px;padding-left:20px;color:#202a2f}
+.blk li{margin-bottom:4px}
+.blk.tech{background:#f7f8f6;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.quote{background:#eaf3ec;border-left:3px solid #3d7a52;padding:9px 13px;border-radius:0 8px 8px 0;
+font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:13px;color:#2f5f40;margin-bottom:8px}
+.quote .loc{display:block;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:11px;color:#5f8a6d;margin-top:4px}
+.cite{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;padding:6px 0;
+border-bottom:1px dashed var(--line)}
+.tag.ok{background:#eaf3ec;color:#3d7a52} .tag.warn{background:var(--gold-soft);color:var(--gold)}
+.tag{border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.srcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;
+border-top:1px dashed var(--line);padding-top:11px}
+.srcbtn{background:var(--gold);color:#fff;border-radius:8px;padding:7px 15px;font-size:13px;font-weight:600}
+.srcbtn:hover{filter:brightness(.94);text-decoration:none}
+.srcbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.muted{color:var(--faint)}
+.empty{padding:34px;text-align:center;color:var(--sub)}
+.excl{font-size:12.5px;color:var(--sub);padding-left:20px;line-height:1.9}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f2f4f1;font-weight:700}
+td.t{max-width:340px}
+tr.out td{color:var(--faint)}
+.h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;margin:18px 0 8px}
+.notebox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;font-size:13px;color:var(--sub)}
+.notebox h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;color:var(--ink);margin-bottom:8px}
+.notebox p{margin-bottom:8px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.cover{padding:30px 20px}}
+@media print{body{background:#fff}.card,.item,.cover,.stat{break-inside:avoid}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+
+<div class="cover">
+  <div class="kicker">合规洞察 · 可视化版</div>
+  <h1>综合监管动态</h1>
+  <h2>合规洞察报告</h2>
+  <div class="issue">（未编号期次）</div>
+  <div class="meta">监测窗口：2026年10月1日至2026年10月15日 ｜ 本期信息截至2026年10月15日 ｜ 生成时间：2026-10-15 07:56</div>
+  <div class="meta">报告模式：演示/工作稿（含待核验条目）</div>
+  <span class="mode warn">含待核验条目</span>
+</div>
+
+<div class="warn">本报告为**含待核验条目的演示/工作稿**：窗口内 35 条尚未完成原文核验，全部条目已逐条标注「待核验·演示内容」，未经核验不得对外作为当期监管动态引用；切换正式模式后这 35 条将被排除。</div>
+
+<div class="stats"><div class="stat"><div class="stat-n">35</div><div class="stat-l">窗口内条目</div><div class="stat-s">回溯窗口全部条目</div></div><div class="stat"><div class="stat-n">8</div><div class="stat-l">自动入选</div><div class="stat-s">相关度阈值 55</div></div><div class="stat"><div class="stat-n">35</div><div class="stat-l">未核验/演示</div><div class="stat-s">正式模式将排除</div></div><div class="stat"><div class="stat-n">61.5</div><div class="stat-l">平均相关度</div><div class="stat-s">入选条目均分</div></div></div>
+
+<div class="card">
+  <h2>窗口内条目趋势</h2>
+  <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="窗口内每日条目趋势"><rect width="720" height="240" fill="#ffffff"/><line x1="46" y1="186.0" x2="700" y2="186.0" stroke="#dfe4e1"/><text x="38" y="190.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="147.0" x2="700" y2="147.0" stroke="#dfe4e1"/><text x="38" y="151.0" text-anchor="end" font-size="10" fill="#5b6b70">5</text><line x1="46" y1="108.0" x2="700" y2="108.0" stroke="#dfe4e1"/><text x="38" y="112.0" text-anchor="end" font-size="10" fill="#5b6b70">10</text><line x1="46" y1="69.0" x2="700" y2="69.0" stroke="#dfe4e1"/><text x="38" y="73.0" text-anchor="end" font-size="10" fill="#5b6b70">15</text><line x1="46" y1="30.0" x2="700" y2="30.0" stroke="#dfe4e1"/><text x="38" y="34.0" text-anchor="end" font-size="10" fill="#5b6b70">20</text><rect x="56.5" y="170.4" width="22.7" height="15.6" fill="#b8873a" opacity=".35" rx="2"/><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="67.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-01</text><rect x="100.1" y="170.4" width="22.7" height="15.6" fill="#b8873a" opacity=".35" rx="2"/><rect x="100.1" y="178.2" width="22.7" height="7.8" fill="#b8873a" rx="2"/><rect x="143.7" y="162.6" width="22.7" height="23.4" fill="#b8873a" opacity=".35" rx="2"/><rect x="143.7" y="178.2" width="22.7" height="7.8" fill="#b8873a" rx="2"/><text x="155.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-03</text><rect x="187.3" y="154.8" width="22.7" height="31.2" fill="#b8873a" opacity=".35" rx="2"/><rect x="187.3" y="170.4" width="22.7" height="15.6" fill="#b8873a" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="242.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-05</text><rect x="274.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="274.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="318.1" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="318.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="329.4" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-07</text><rect x="361.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="361.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="416.6" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-09</text><rect x="448.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="448.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="492.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="492.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="503.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-11</text><rect x="536.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="536.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="579.7" y="178.2" width="22.7" height="7.8" fill="#b8873a" opacity=".35" rx="2"/><rect x="579.7" y="178.2" width="22.7" height="7.8" fill="#b8873a" rx="2"/><text x="591.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-13</text><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="666.9" y="162.6" width="22.7" height="23.4" fill="#b8873a" opacity=".35" rx="2"/><rect x="666.9" y="162.6" width="22.7" height="23.4" fill="#b8873a" rx="2"/><text x="678.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-15</text><rect x="46" y="210" width="10" height="10" fill="#b8873a" opacity=".35" rx="2"/><text x="61" y="219" font-size="10.5" fill="#5b6b70">窗口内全部条目</text><rect x="176" y="210" width="10" height="10" fill="#b8873a" rx="2"/><text x="191" y="219" font-size="10.5" fill="#5b6b70">自动入选条目</text></svg>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<div class="card">
+  <h2>入选条目类型分布</h2>
+  <svg viewBox="0 0 720 124" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="124" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">征求意见</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">5</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">新法规</text><rect x="168" y="47" width="188.8" height="16" fill="#b8873a" opacity="0.69" rx="3"/><text x="364.8" y="60" font-size="11.5" fill="#5b6b70">2</text><text x="158" y="89" text-anchor="end" font-size="12" fill="#13191c">执法处罚</text><rect x="168" y="77" width="94.4" height="16" fill="#b8873a" opacity="0.62" rx="3"/><text x="270.4" y="90" font-size="11.5" fill="#5b6b70">1</text></svg>
+  <h2 style="margin-top:18px">命中业务线分布（内部评分口径，不含公司身份信息）</h2>
+  <svg viewBox="0 0 720 184" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="184" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">信息化·网安</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">6</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">AI应用</text><rect x="168" y="47" width="236.0" height="16" fill="#b8873a" opacity="0.73" rx="3"/><text x="412.0" y="60" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="89" text-anchor="end" font-size="12" fill="#13191c">数据要素</text><rect x="168" y="77" width="236.0" height="16" fill="#b8873a" opacity="0.73" rx="3"/><text x="412.0" y="90" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="119" text-anchor="end" font-size="12" fill="#13191c">数字建造平台</text><rect x="168" y="107" width="157.3" height="16" fill="#b8873a" opacity="0.67" rx="3"/><text x="333.3" y="120" font-size="11.5" fill="#5b6b70">2</text><text x="158" y="149" text-anchor="end" font-size="12" fill="#13191c">产业互联网·招采</text><rect x="168" y="137" width="78.7" height="16" fill="#b8873a" opacity="0.61" rx="3"/><text x="254.7" y="150" font-size="11.5" fill="#5b6b70">1</text></svg>
+  <div class="figcap">业务线为相关度评分的内部权重维度，用于排序，不代表已确认的业务事实。</div>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<section class="chapter"><h2>人工智能与算法监管动态<span class="cnt">3 条</span></h2>
+<article class="item" id="item-itm-20261015-4966">
+  <header>
+    <div class="meta">
+      <span class="badge">01</span>
+      <span class="score">71</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-15</span>
+      <span class="chip">AI应用</span><span class="chip">数据要素</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>全国网络安全标准化技术委员会2026年第二次“标准周”活动圆满收官</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年9月15日至18日，全国网络安全标准化技术委员会（简称“全国网安标委”）2026年第二次“标准周”活动在山东省济南市举办。本次“标准周”活动由全国网安标委主办，中国电子技术标准化研究院承办，中国互联网发展基金会网络安全专项基金支持。全国网安标委副主任委员和委员、秘书长和副秘书长、工作组组长和副组长、成员单位代表，中央网信办网络安全协调局、市场监管总局标准创新管理司和济南市负责同志共900余人参加。
+9月15日上午，召开标准周全体成员会议。全国网安标委主任委员、中央网信办副主任、国家网信办副主任王京涛出席并讲话，国家市场监督管理总局标准创新管理司相关负责同志出席会议，济南市委副书记杨峰致欢迎辞，中国电子技术标准化研究院院长刘贤刚主持会议。会上，受邀专家围绕新一代商用密码算法、网络安全产品互联互通、科学智能（AI4S）的进展与安全、具身智能和智能体安全、面向人工智能的网络安全技术与产品演进、2026年中国网络安全产业发展等主题分享技术方案和标准化实践。
+9月15日下午，召开电子产品信息清除分论坛。中央网信办网络安全协调局副局长屠守中出席会议并发表主题演讲，国家市场监管总局标准创新管理司相关负责同志出席会议，中国电子技术标准化研究院副院长范科峰出席会议并致欢迎词，中国电子技术标准化研究院网络安全中心副主任李琳主持会议。论坛邀请来自电子标准院、中国银行、中资环集团、华为终端等企事业单位代表分享了GB 46864-2025实施筹备、国际标准化推进、产品功能开发、二手电子产品回收信息清除管理以及金融行业设备退装信息清除实践等相关内容。会上还发起了电子产品信息清除行业自律倡议，发布了电子产品信息清除公共服务平台，对GB 46864-2025强标配套落地实施的3项网络安全标准实践指南进行了发布解读，开展了以“守护电子产品信息安全与清除实施的关键点和突破口”为主题的圆桌讨论。
+9月15日至16日，召开密码技术标准工作组（WG3）第二次全体会议。来自50余家成员单位的80余名代表参加会议。会议审议推进了4项标准草案、1项征求意见稿，组织对1项标准研究课题开展了研讨，对2026年已发布的5项密码国家标准进行了解读和宣贯，讨论了密码标准体系。会议评选出张立廷（中电科网络安全科技股份有限公司）、王妮娜（兴唐通信科技有限公司）2名先进个人。
+9月15日至16日，召开鉴别与授权标准工作组（WG4）第二次全体会议。工作组组长荆继武、副组长李新友参加并主持了会议，共有50余名代表报名参会。会议审议推进了3项标准草案、3项征求意见稿，组织对1项标准研究课题、2项标准立项需求开展了研讨。会议评选出王琼霄（北京数字认证股份有限公司）1名先进个人。
+9月15日至17日，召开网络安全评估标准工作组（WG5）第二次全体会议。工作组副组长布宁、李斌、陆臻、唐刚参加并主持了会议，共有240余名代表报名参会。会议审议推进了在研标准11项，其中9项标准草案、2项征求意见稿；讨论了6项征求意见稿标准，组织对4项标准研究课题开展了研讨。会议评选出叶同坤（杭州迪普科技股份有限公司）、申永波（中国网络安全审查认证和市场监管大数据中心）2名先进个人。
+9月15日至16日，召开通信安全标准工作组（WG6）第二次全体会议。工作组组长于生多、副组长舒敏、赵莹参加并主持了会议，共有30余名代表报名参会。会议审议讨论了3项标准草案，组织对标准研究课题《互联网基础资源安全标准体系研究》开展了研讨。会议评选出魏瑛（中移量子科技有限公司）1名先进个人。
+9月15日至16日，召开网络安全管理标准工作组（WG7）第二次全体会议。工作组组长姚相振、副组长闵京华、杨晨、邱勤参加并主持了会议，共有190余名代表报名参会。会议审议推进了4项标准草案、3项征求意见稿，对4项标准项目进行了讨论，组织对3项标准研究课题开展了研讨。会议评选出刘吉林（杭州迪普科技股份有限公司）1名先进个人。
+9月15日至17日，召开数据安全标准工作组（WG8）第二次全体会议。工作组组长王建民、副组长陈兴蜀、林志强、魏薇、胡光俊参加并主持了会议，共有260余名代表报名参会。会议审议推进了14项标准草案、6项征求意见稿。会议评选出王洒洒（上海计算机软件技术开发中心）、张灵子（飞利浦（中国）投资有限公司）2名先进个人。
+9月15日至16日，召开人工智能安全标准工作组（WG9）第四次全体会议。工作组组长周伯文、副组长张震、盛小宝、侯元伟参加并主持了会议，共有340余名代表报名参加了本次会议。会议审议推进了12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿，对人工智能安全标准体系、1项强制性国家标准、16项推荐性国家标准、8项国家标准化指导性技术文件进行了讨论，组织对5项标准研究课题开展了研讨。会议评选出杨波（中国移动研究院）、闵京华（北京青囊风华文化传媒有限公司）2名先进个人。
+9月15日至17日，召开新技术安全标准特别工作组（SWG-ETS）第二次全体会议。工作组组长刘勇，副组长伍扬、张格、王永剑、石竑松出席并主持会议，共有150余名代表报名参会。会议审议推进了1项征求意见稿、1项送审稿，对3项标准项目进行了讨论，组织对1项标准研究课题与WG3共同开展了联合评审。会议同期开设量子安全、云安全、新技术安全三场专题研讨会，聚焦量子计算安全、云安全与云原生、卫星互联网、低空产业等新兴领域安全议题，汇聚业内专家开展前沿研讨与成果分享，探索新技术安全标准化需求，进一步完善标准体系。会议评选出卢夏（国家信息技术安全研究中心）1名先进个人。
+9月15日至16日，召开网络安全国际标准研究组（SG1）第三次全体会议。研究组组长林宁，副组长胡影、陈恺、李童，以及研究组成员、秘书等20余人参加会议。会议总结我国2026年下半年SC44国际会议成果，讨论2026年下半年我国SC27国际标准提案推进策略，听取《网络安全国际标准化动态与路径研究》《国内外网络安全标准化对比分析》2项研究课题汇报，邀请机械工业北京电工技术经济研究所副所长张亮就《ISO/IEC导则第1部分》（2026版）的组织机构与技术工作职责、标准（文件）制定、文件维护、会议、申诉等内容进行授课并开展交流答疑。会议评选出刘梓含（中国电子技术标准化研究院）1名先进个人。</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会2026年第二次“标准周”活动报道，属标准工作动态类信息，非具体法规或标准文本，未载明任何具体条款、施行日期或征求意见截止日。</p><p>报道涉及与公司业务画像命中业务线相关的标准化议题：全体成员会议主题分享涵盖具身智能和智能体安全、面向人工智能的网络安全技术与产品演进等（关联AI应用、信息化·网安）；人工智能安全标准工作组（WG9）第四次全体会议审议推进12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿（关联AI应用）；数据安全标准工作组（WG8）第二次全体会议审议推进14项标准草案、6项征求意见稿（关联数据要素）；新技术安全标准特别工作组（SWG-ETS）同期开设量子安全、云安全、新技术安全三场专题研讨会（关联信息化·网安）。</p><p>电子产品信息清除分论坛涉及GB 46864-2025强标实施筹备及其3项配套网络安全标准实践指南发布解读，该标准编号及配套文件具体内容原文未展开。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本条为活动报道，未给出可执行义务，对业务线的直接触发条件待确认。若后续WG9推进的人工智能安全推荐性国家标准征求意见稿、国家标准化指导性技术文件草案正式发布征求意见或实施，公司AI应用相关产品（如星环、星枢中的AI能力）在标准适用范围内的合规要求可能发生变化；若WG8推进的数据安全标准草案、征求意见稿落地，可能影响数据要素相关业务的数据处理与安全要求；若SWG-ETS云安全、量子安全等议题形成标准文件，可能影响信息化·网安相关产品与服务的适配要求。上述影响均取决于后续标准文本的适用范围与实施安排，现无法确定。</p></div><div class="blk"><div class="lab">建议</div><ul><li>持续跟踪全国网安标委WG8（数据安全）、WG9（人工智能安全）、SWG-ETS（新技术安全）后续标准草案、征求意见稿的公开征求意见通知与发布文本，在标准文本公开后再评估对星环、星枢及AI应用、数据要素、信息化·网安业务的适用性与整改需求；本条报道本身无需启动具体合规动作。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“9月15日至16日，召开人工智能安全标准工作组（WG9）第四次全体会议。”<span class="loc">WG9第四次全体会议段</span></blockquote><blockquote class="quote">“会议审议推进了12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿”<span class="loc">WG9第四次全体会议段</span></blockquote><blockquote class="quote">“9月15日至17日，召开数据安全标准工作组（WG8）第二次全体会议。”<span class="loc">WG8第二次全体会议段</span></blockquote><blockquote class="quote">“会议审议推进了14项标准草案、6项征求意见稿。”<span class="loc">WG8第二次全体会议段</span></blockquote><blockquote class="quote">“会议同期开设量子安全、云安全、新技术安全三场专题研讨会，聚焦量子计算安全、云安全与云原生、卫星互联网、低空产业等新兴领域安全议题”<span class="loc">SWG-ETS第二次全体会议段</span></blockquote><blockquote class="quote">“受邀专家围绕新一代商用密码算法、网络安全产品互联互通、科学智能（AI4S）的进展与安全、具身智能和智能体安全、面向人工智能的网络安全技术与产品演进、2026年中国网络安全产业发展等主题分享技术方案和标准化实践。”<span class="loc">标准周全体成员会议段</span></blockquote><blockquote class="quote">“对GB 46864-2025强标配套落地实施的3项网络安全标准实践指南进行了发布解读”<span class="loc">电子产品信息清除分论坛段</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/xwdt1/202609/82b38e25c8904dcf906450f99f489759.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article>
+<article class="item" id="item-itm-20261015-8125">
+  <header>
+    <div class="meta">
+      <span class="badge">02</span>
+      <span class="score">66</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-15</span>
+      <span class="chip">AI应用</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开
+发布时间：
+2026-04-07
+2026年3月30日，全国网络安全标准化技术委员会2026年第一次全体委员会议在广东省珠海市召开。中央网信办副主任、国家网信办副主任、网安标委主任委员王京涛出席会议并讲话，会议由温哲副主任委员主持。
+会议首先播放总结视频，从工作机制建设、组织架构完善、标准体系建设、强制性国家标准研制、标准宣贯实施、国际标准化等方面系统回顾了第三届网安标委工作成果。会议指出，第三届网安标委在市场监管总局、国家标准委的有力指导下，在工业和信息化部、公安部、国家安全部、国家保密局、国家密码管理局等部门的大力支持下，各位委员、工作组和秘书处扎实开展大量工作，成效显著。
+会议强调，网安标委一是要谋划布局未来五年工作。2026年是“十五五”开局之年，也是网安标委换届之年，要对标国民经济和社会发展第十五个五年规划纲要，按照网络强国建设和国家网络安全工作部署要求，结合当前国际、国内的形势变化，从标准研制、组织管理、应用实施等多方面主动谋划网安标委“十五五”的工作。二是要加快重点亟需标准研制。要进一步完善关键信息基础设施安全标准化建设，加快网络安全产品互联互通系列标准研制，实现网络安全产品级、系统级互联互通。要借鉴人工智能生成合成内容标识管理的“政策文件+标准+配套实践指南”模式，以标准推动政策文件落地实施；新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准。三是要加大标准实施应用力度。加强电子产品信息清除强标、网络安全产品互联互通等标准落地实施与应用推广，加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级；针对新兴前沿技术领域，利用好指导性技术文件、标准实践指南。四是要抢抓国际标准话语权。探索常态化承办国际标准会议的工作模式，承担好ISO IEC JTC1 SC27和SC44两个国际标准化技术组织国内对口的职责和任务，发挥好国内各相关领域标准专家力量，持续提升我国国际标准提案的质量。积极借鉴国际标准，提高我国标准质量。要围绕人工智能、抗量子密码等新技术领域，多开展国际技术交流。五是要持续提升网安标委影响力。充分发挥新成立的人工智能安全标准工作组（WG9）、网络安全国际标准研究组（SG1）作用，围绕粤港澳协同等深入开展标准研讨。要组织做好新一届委员和工作组成员单位征集遴选工作。各位委员、各个工作组要进一步加强协同联动、互相配合，秘书处要更好地发挥好参谋助手和桥梁纽带作用，共同把网安标委打造成网络安全领域具有广泛影响力的标准化技术组织。
+会议审议通过了网安标委2025年工作总结和2026年工作要点，听取了网安标委2025年度财务报告、各工作组2025年工作总结和2026年工作计划汇报，对2025年度网安标委标准化工作先进个人和先进单位进行了表彰。
+网安标委副主任委员、秘书长、副秘书长以及各位委员、各工作组组长和副组长、相关组织代表参加会议。
+附件：
+分享到：
+微信分享“扫一扫”</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会2026年第一次全体委员会议的会议报道，未载明具体征求意见的标准草案、条款或意见反馈渠道，属于网络安全标准化工作部署层面的信息。</p><p>会议提出要加快重点亟需标准研制，包括完善关键信息基础设施安全标准化建设、加快网络安全产品互联互通系列标准研制，并借鉴人工智能生成合成内容标识管理&#x27;政策文件+标准+配套实践指南&#x27;模式以标准推动政策文件落地实施。</p><p>会议明确新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准，并围绕人工智能、抗量子密码等新技术领域开展国际技术交流。</p><p>会议还提出加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级，并针对新兴前沿技术领域利用好指导性技术文件、标准实践指南。</p><p>会议指出2026年是&#x27;十五五&#x27;开局之年，也是网安标委换届之年，要从标准研制、组织管理、应用实施等多方面谋划&#x27;十五五&#x27;工作。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>若后续人工智能安全标准工作组（WG9）就智能体安全等标准形成征求意见稿或发布稿，公司AI应用业务线在智能体相关产品的研发、评测与对外提供环节可能需对照相应标准要求；若网络安全标识相关标准落地，公司信息化·网安业务线涉及联网产品安全标识等级的合规判定条件可能被触发；若网络安全产品互联互通系列标准研制推进，涉及网络安全产品对接的系统集成场景可能需满足级、系统级互联互通要求。上述标准目前尚未见具体文本，具体适用条款与生效时间待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>持续跟踪网安标委人工智能安全标准工作组（WG9）及网络安全标识、网络安全产品互联互通相关标准的研制进展与征求意见通知；在相应标准草案公开征求意见时，组织AI应用与信息化·网安相关产品线开展条款比对；关注人工智能生成合成内容标识管理&#x27;政策文件+标准+配套实践指南&#x27;模式的配套文件动向。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“要借鉴人工智能生成合成内容标识管理的“政策文件+标准+配套实践指南”模式，以标准推动政策文件落地实施；新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准。”<span class="loc">会议强调第二项&#x27;加快重点亟需标准研制&#x27;部分</span></blockquote><blockquote class="quote">“要进一步完善关键信息基础设施安全标准化建设，加快网络安全产品互联互通系列标准研制，实现网络安全产品级、系统级互联互通。”<span class="loc">会议强调第二项&#x27;加快重点亟需标准研制&#x27;部分</span></blockquote><blockquote class="quote">“加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级；针对新兴前沿技术领域，利用好指导性技术文件、标准实践指南。”<span class="loc">会议强调第三项&#x27;加大标准实施应用力度&#x27;部分</span></blockquote><blockquote class="quote">“要围绕人工智能、抗量子密码等新技术领域，多开展国际技术交流。”<span class="loc">会议强调第四项&#x27;抢抓国际标准话语权&#x27;部分</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/xwdt1/202604/03df3b74b6ea4e1d8b2a40e2364b030e.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d01">
+  <header>
+    <div class="meta">
+      <span class="badge">03</span>
+      <span class="score">61</span>
+      <span class="tag">新法规</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 中国网信网 · 2026-10-04</span>
+      <span class="chip">AI应用</span><span class="chip">数字建造平台</span>
+    </div>
+    <h3>网信办《生成式人工智能服务备案实施细化要求》发布：模型备案新增安全评估实测记录</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年9月28日，国家互联网信息办公室发布《生成式人工智能服务备案实施细化要求》。主要内容：（1）明确备案范围为面向境内公众提供生成式人工智能服务的组织，实行属地省级网信部门初审、国家网信办终审的两级流程；（2）规定备案材料清单，包括安全自评估报告（须按GB/T 45654—2025编制）、模型基本情况表、训练数据来源与合法性说明、标识义务落实情况说明、安全事件应急处置预案等；（3）明确重大变更情形须重新履行评估备案程序；（4）自2026年11月1日起施行，存量服务给予六个月过渡期。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属义务明确化而非新设义务：该文件系对《生成式人工智能服务管理暂行办法》（国家互联网信息办公室等七部门令第15号，自2023年8月15日起施行，以下简称《暂行办法》）第十七条“安全评估+备案”双重义务的程序性细化，本身未新增实体义务，但将备案材料标准化（第四项要求提交“安全评估报告及关键问答实测记录”），实质抬高了举证门槛。就义务主体而言，《暂行办法》第二条以“向境内公众提供生成文本、图片、音频、视频等内容的服务”界定服务提供者；公司面向集团外部客户提供的智能问答、智能报告生成功能属于义务主体范围，嵌入信息化项目交付的AI能力是否构成“面向公众提供服务”存在解释空间。配套义务链条已经闭合：算法备案（《互联网信息服务算法推荐管理规定》第二十四条）、内容标识（《人工智能生成合成内容标识办法》，自2025年9月1日起施行）、安全评估技术依据（GB/T 45654—2025，自2025年11月1日起实施）。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方两条业务线：平台对外提供的AI生成功能（触发条件：面向境内公众提供服务）与嵌入客户项目交付的AI能力（触发条件待解释）。对照现状：（1）公司尚未开展生成式人工智能服务备案；（2）现有安全评估材料未按GB/T 45654—2025体例编制，与备案清单存在差距；（3）投标场景已出现“供应商AI功能须已完成备案或承诺中标后限期完成”的资格条件，备案进度直接影响投标应答。违规后果：未履行备案义务的，依据《暂行办法》第二十一条，由主管部门依照《中华人民共和国网络安全法》（2025年修正，自2026年1月1日起施行）等追究法律责任。据公开信息，头部服务商均已闭环备案，备案已成为行业事实门槛。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）10月17日前完成存量及在研AI功能面向公众提供情况的排查建档（法务合规部牵头）；（2）对落入范围的产品，10月31日前完成安全自评估报告编制立项并启动属地网信部门沟通（科技研发部配合）；（3）10月24日前出具嵌入交付型AI功能是否构成“面向公众提供服务”的分析意见，同步修订投标合规承诺模板（法务合规部）；（4）本事项列为橙色风险（O-01），纳入合规义务台账（YW-01），按月更新进度。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……提供者应当提交安全评估报告及关键问答实测记录……（细化要求备案材料清单第四项）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>数据要素与个人信息保护监管动态<span class="cnt">2 条</span></h2>
+<article class="item" id="item-demo-d04">
+  <header>
+    <div class="meta">
+      <span class="badge">04</span>
+      <span class="score">61</span>
+      <span class="tag">新法规</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 中国网信网 · 2026-10-03</span>
+      <span class="chip">数据要素</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>网信办《个人信息出境认证办法》：认证成为出境三条路径之一，11 月 1 日施行</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月3日，国家互联网信息办公室发布《个人信息出境认证办法》，自2026年11月1日起施行。主要内容包括：专业机构认证成为个人信息出境三条路径之一；认证机构名录与申请程序一并公布；存量业务自施行之日起60日内完成申报。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属体系补全：《中华人民共和国个人信息保护法》（2021年8月20日主席令第九十一号公布，自2021年11月1日起施行，以下简称《个人信息保护法》）第三十八条确立“安全评估、认证、标准合同”三路径框架，本办法将认证路径落地为可操作程序（第四条：处理者可通过国家网信部门认定的专业机构认证出境）。未按期申报的，依据《个人信息保护法》第六十六条处理，情节严重的最高可处五千万元或上一年度营业额百分之五罚款。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方涉境外节点的数据回流业务（触发条件：向境外提供个人信息且未走安全评估路径），涉及3条产品线。经初步排查，公司存量跨境传输均未完成三条路径中任何一种的合规手续，属红色风险。认证路径与标准合同路径的成本、周期对比及选型建议见可视化版报告第六区。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）10月17日前完成存量跨境业务逐项盘点（数据管理部）；（2）10月31日前完成三路径选型论证并出具书面意见（法务合规部牵头）；（3）选型后立即启动申报，确保12月31日窗口关闭前完成（责任部门按选型结果确定）；（4）列为红色风险（R-01），纳入义务台账（YW-05），每周向公司领导报告进度。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“第四条：个人信息处理者可以向国家网信部门认定的专业机构申请个人信息保护认证，作为向境外提供个人信息的合规路径。……存量业务应当自本办法施行之日起六十日内完成申报。”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d06">
+  <header>
+    <div class="meta">
+      <span class="badge">05</span>
+      <span class="score">57</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">最高人民法院 · 官网 · 2026-10-02</span>
+      <span class="chip">数据要素</span><span class="chip">产业互联网·招采</span>
+    </div>
+    <h3>最高法《数据权益保护司法解释（征求意见稿）》公开征求意见</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月2日，最高人民法院就《数据权益保护司法解释（征求意见稿）》向社会公开征求意见，反馈截止日期为2026年10月17日前后。征求意见稿首次在司法层面回应数据资源持有权、加工使用权、产品经营权的界定。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属立法进程：征求意见稿不具拘束力，但按既往惯例正式稿与征求意见稿核心条款重合度较高，宜按“准义务”预研。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项对我方属诉讼策略与确权路径的前瞻变量：平台数据产品的权属界定将直接影响交易结构与维权基础。</p></div><div class="blk"><div class="lab">建议</div><ul><li>10月17日前组织内部评审并提交行业意见（法务合规部）。纳入立法进程跟踪表，列为黄色风险（Y-05）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“征求意见稿首次在司法层面回应数据资源持有权、加工使用权、产品经营权的界定，明确数据权益的保护范围与侵权认定规则。”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.court.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>网络与数据安全监管动态<span class="cnt">2 条</span></h2>
+<article class="item" id="item-itm-20261013-8406">
+  <header>
+    <div class="meta">
+      <span class="badge">06</span>
+      <span class="score">64</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-13</span>
+      <span class="chip">信息化·网安</span>
+    </div>
+    <h3>2026-10-13 关于下达25项网络安全推荐性国家标准计划的通知</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>申请成员单位
+|
+登录
+首页
+新闻动态
+行业观点
+标准征求意见
+出版物
+关于我们
+首页 / 新闻动态 / 通知公告
+关于下达25项网络安全推荐性国家标准计划的通知
+发布时间：
+2026-10-13
+各工作组、各项目牵头承担单位：
+近日，国家标准化管理委员会下达的推荐性国家标准计划，其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，详细信息见附件。
+请项目所属工作组制定项目推进计划，并督促项目牵头承担单位按计划抓紧落实，在计划执行中要加强协调，广泛征求意见，确保标准质量和水平，按要求完成国家标准制修订任务。
+附件：25项网络安全推荐性国家标准计划项目清单
+全国网络安全标准化技术委员会秘书处
+2026年10月13日
+附件：
+网安秘字〔2026〕121号——关于下达25项网络安全推荐性国家标准计划的通知.pdf
+分享到：
+微信分享“扫一扫”
+全国网络安全标准化技术委员会秘书处 版权所有 ©2009-2026
+地址：中国 北京 安定门东大街一号 中国电子技术标准化研究院
+联系电话：010-64102730,64102731 传真：010-64102997 邮编：100007
+京ICP备05013730号-14
+京公网安备11010102004561号
+新闻动态</p></div><div class="blk"><div class="lab">适用性</div><p>全国适用 · 指引性要求（其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理） <span class="muted">（模型预判，以原文为准）</span></p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会秘书处发布的《关于下达25项网络安全推荐性国家标准计划的通知》，属标准计划下达类征求意见/推进通知，明确《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，并要求项目所属工作组制定项目推进计划、督促牵头承担单位抓紧落实、加强协调、广泛征求意见。</p><p>通知正文未列出25项标准的具体名称、内容、适用范围与实施安排，仅以附件《25项网络安全推荐性国家标准计划项目清单》形式给出详细信息，因此无法从本条原文判断具体标准对密码使用、数据接口或网络安全管理提出的具体要求。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本条命中信息化·网安业务线：若后续附件清单中的标准（如涉及JSON密码使用语法等密码与数据接口类标准）在正式发布并适用后，公司数字建造平台、投建营一体化平台、产业互联网·招采及AI应用、数据要素相关产品的密码使用与数据接口设计，可能被要求对照标准进行合规评估与改造；触发条件为该批标准正式发布并对公司相关产品适用，具体标准条目、适用范围与施行时间待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>建议关注该通知附件《25项网络安全推荐性国家标准计划项目清单》以确认与公司业务相关的标准项目及牵头单位；在相关标准正式发布前，对涉及密码使用、数据接口的信息化·网安相关产品线进行现状梳理，为后续标准符合性评估预留改造窗口；同时跟踪全国网络安全标准化技术委员会的征求意见动态。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“近日，国家标准化管理委员会下达的推荐性国家标准计划，其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，详细信息见附件。”<span class="loc">通知正文第一段</span></blockquote><blockquote class="quote">“请项目所属工作组制定项目推进计划，并督促项目牵头承担单位按计划抓紧落实，在计划执行中要加强协调，广泛征求意见，确保标准质量和水平，按要求完成国家标准制修订任务。”<span class="loc">通知正文第二段</span></blockquote><blockquote class="quote">“附件：25项网络安全推荐性国家标准计划项目清单”<span class="loc">正文附件说明</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验</span>
+  </footer>
+</article>
+<article class="item" id="item-itm-20261015-4344">
+  <header>
+    <div class="meta">
+      <span class="badge">07</span>
+      <span class="score">56</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-15</span>
+      <span class="chip">信息化·网安</span>
+    </div>
+    <h3>标准征求意见</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>申请成员单位
+|
+登录
+首页
+新闻动态
+行业观点
+标准征求意见
+出版物
+关于我们
+首页/标准征求意见
+全国网络安全标准化技术委员会秘书处 版权所有 ©2009-2026
+地址：中国 北京 安定门东大街一号 中国电子技术标准化研究院
+联系电话：010-64102730,64102731 传真：010-64102997 邮编：100007
+京ICP备05013730号-14
+京公网安备11010102004561号
+标准征求意见</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条目为全国网络安全标准化技术委员会（TC260）官网「标准征求意见」列表页的公开页面信息，页面仅呈现栏目名称与机构版权、地址、联系方式等通用信息，未列出任何具体标准名称、条款内容或征求意见起止时间。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>因页面未披露任何具体征求意见标准，无法判断对『信息化·网安』业务线的触发条件；若后续该栏目发布涉及网络安全等级保护、数据安全或安全技术要求的征求意见稿，相关平台产品（如数字建造平台、投建营一体化平台）的安全设计与合规改造需求可能被触发，具体待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>建议持续跟踪 TC260「标准征求意见」栏目后续发布的具体标准项目，待具体征求意见稿公布后，再就适用范围、实施日期与对本公司平台产品的影响作进一步评估；本条暂无具体可执行动作。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“标准征求意见”<span class="loc">页面栏目名称（首页/标准征求意见）</span></blockquote><blockquote class="quote">“全国网络安全标准化技术委员会秘书处 版权所有 ©2009-2026”<span class="loc">页面页脚版权信息</span></blockquote><blockquote class="quote">“地址：中国 北京 安定门东大街一号 中国电子技术标准化研究院”<span class="loc">页面页脚联系信息</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/bzzqyj/yjzj_list.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>数字建造与行业应用监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-demo-d03">
+  <header>
+    <div class="meta">
+      <span class="badge">08</span>
+      <span class="score">56</span>
+      <span class="tag">执法处罚</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办等四部门 · 2025-09-01 施行 · 2026-10-04</span>
+      <span class="chip">数字建造平台</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>《人工智能生成合成内容标识办法》施行首日：多家平台上线强制标注功能</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>《人工智能生成合成内容标识办法》（国家网信办等四部门2025年3月7日公布，自2025年9月1日起施行）运行满一年，本期监管通报显示多家平台完成强制标注功能改造，显式标识与含元数据的隐式标识同步落地，配套强制性国家标准GB 45438—2025同步实施。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属义务持续履行阶段：办法第九条课以网络信息内容传播平台“核验生成合成内容是否含有规定的标识”的义务，属持续性作为义务；未履行核验义务提供传播服务的，依据《中华人民共和国网络安全法》第六十五条处理。GB 45438—2025作为强制性国家标准，使标识义务具备可检测的技术基准。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方平台内容发布链路（触发条件：平台提供用户生成内容与AI生成内容复合服务）。公司发布链路尚未嵌入标识检测能力，用户协议与社区规则亦未同步标识条款。行业层面，本期通报显示主要平台均已完成改造，标识核验已成为平台标配能力。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）11月15日前完成发布链路标识检测改造立项（科技研发部牵头）；（2）同步修订用户协议、社区规则中的AI生成内容条款（法务合规部）；（3）纳入义务台账（YW-02），状态“未启动”，列为橙色风险（O-02）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……网络信息内容传播平台应当核验生成合成内容是否含有本办法规定的标识……（办法第九条）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section>
+
+<div class="card">
+  <h2>下一步工作建议</h2>
+  <ol class="excl"><li>跟踪落实「全国网络安全标准化技术委员会2026年第二次“标准周」：持续跟踪全国网安标委WG8（数据安全）、WG9（人工智能安全）、SWG-ETS（新技术安全）后续标准草案、征求意见稿的公开征求意见通知与发布文本，在标准文本公开后再评估对星环、…</li><li>跟踪落实「全国网络安全标准化技术委员会2026年第一次全体委员」：持续跟踪网安标委人工智能安全标准工作组（WG9）及网络安全标识、网络安全产品互联互通相关标准的研制进展与征求意见通知；在相应标准草案公开征求意见时，组织AI应用与信息化·网安相…</li><li>跟踪落实「2026-10-13 关于下达25项网络安全推荐性国」：建议关注该通知附件《25项网络安全推荐性国家标准计划项目清单》以确认与公司业务相关的标准项目及牵头单位；在相关标准正式发布前，对涉及密码使用、数据接口的信息化·网安相关产品线进…</li><li>跟踪落实「网信办《生成式人工智能服务备案实施细化要求》发布：模」：（1）10月17日前完成存量及在研AI功能面向公众提供情况的排查建档（法务合规部牵头）；（2）对落入范围的产品，10月31日前完成安全自评估报告编制立项并启动属地网信部门沟通（…</li><li>跟踪落实「网信办《个人信息出境认证办法》：认证成为出境三条路径」：（1）10月17日前完成存量跨境业务逐项盘点（数据管理部）；（2）10月31日前完成三路径选型论证并出具书面意见（法务合规部牵头）；（3）选型后立即启动申报，确保12月31日窗…</li><li>跟踪落实「最高法《数据权益保护司法解释（征求意见稿）》公开征求」：10月17日前组织内部评审并提交行业意见（法务合规部）。纳入立法进程跟踪表，列为黄色风险（Y-05）。</li><li>跟踪落实「标准征求意见」：建议持续跟踪 TC260「标准征求意见」栏目后续发布的具体标准项目，待具体征求意见稿公布后，再就适用范围、实施日期与对本公司平台产品的影响作进一步评估；本条暂无具体可执行动作。</li><li>跟踪落实「《人工智能生成合成内容标识办法》施行首日：多家平台上」：（1）11月15日前完成发布链路标识检测改造立项（科技研发部牵头）；（2）同步修订用户协议、社区规则中的AI生成内容条款（法务合规部）；（3）纳入义务台账（YW-02），状态“…</li></ol>
+  <div class="figcap">以上为按入选条目自动汇总的跟踪提示，落实情况需人工确认，本报告不主张任何事项已完成。</div>
+</div>
+
+<div class="card">
+  <h2>附录：本期信息索引（含未入选条目）</h2>
+  <table><thead><tr><th>#</th><th>标题</th><th>日期</th><th>类型</th><th>发布主体</th>
+  <th>相关度</th><th>核验状态</th><th>结果</th></tr></thead><tbody><tr class="in"><td>1</td><td class="t">全国网络安全标准化技术委员会2026年第二次“标准周”活动圆满收官</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>71</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>2</td><td class="t">全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>66</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>3</td><td class="t">2026-10-13 关于下达25项网络安全推荐性国家标准计划的通知</td><td>2026-10-13</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>64</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>4</td><td class="t">网信办《生成式人工智能服务备案实施细化要求》发布：模型备案新增安全评估实测记录</td><td>2026-10-04</td><td>新法规</td><td>国家网信办</td><td>61</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>5</td><td class="t">网信办《个人信息出境认证办法》：认证成为出境三条路径之一，11 月 1 日施行</td><td>2026-10-03</td><td>新法规</td><td>国家网信办</td><td>61</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>6</td><td class="t">最高法《数据权益保护司法解释（征求意见稿）》公开征求意见</td><td>2026-10-02</td><td>征求意见</td><td>最高人民法院</td><td>57</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>7</td><td class="t">标准征求意见</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>56</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>8</td><td class="t">《人工智能生成合成内容标识办法》施行首日：多家平台上线强制标注功能</td><td>2026-10-04</td><td>执法处罚</td><td>国家网信办等四部门</td><td>56</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="out"><td>9</td><td class="t">专家解读 | 开展数据产权登记，助力数据要素价值释放</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>66</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>10</td><td class="t">专家解读 | 体系化推进行业高质量数据集建设行动 强化数据赋能人工智能创新发展</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>65</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>11</td><td class="t">专家解读 | 筑基智能时代，释放数据价值</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>65</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>12</td><td class="t">专家解读 | 夯实数据基础，激活智能跃迁——《关于推进行业高质量数据集建设行动的实施方案》解读</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>65</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>13</td><td class="t">专家解读 | 高质量数据构筑人工智能跃升新引擎 “数据飞轮”塑造高质量发展新动能</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>65</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>14</td><td class="t">专家解读 | 以数据产权登记为抓手 探索商业银行数据资产化新路径</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>15</td><td class="t">专家解读 | 以统一数据产权登记体系 推动全国一体化数据市场建设</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>16</td><td class="t">专家解读 | 激活数据产权制度效能 共建全国一体化数据市场</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>17</td><td class="t">专家解读 | 筑牢数智底座 激活要素动能《关于推进行业高质量数据集建设行动的实施方案》解读</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>18</td><td class="t">专家解读 | 推动行业高质量数据集建设，实现与&quot;人工智能+&quot;同频共振——《关于推进行业高质量数据集建设行动的实施方案》解读</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>19</td><td class="t">专家解读 | 释放知识动能 护航数智发展—《关于推进行业高质量数据集建设行动的实施方案》解读</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>20</td><td class="t">专家解读 | 深耕高质量数据集建设 激活人工智能发展新动能</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>21</td><td class="t">专家解读 | 培育数据流通服务机构 繁荣数据市场生态</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>22</td><td class="t">专家解读 | 培育数据流通服务机构 推进数据要素市场化价值化</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>60</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>23</td><td class="t">专家解读 | 以登记指引夯实数据产权制度根基 以能源企业实践赋能数据价值释放</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>50</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>24</td><td class="t">专家解读 | 建立数据产权登记制度 夯实数据基础制度基石</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>50</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>25</td><td class="t">专家解读 | 以规范透明、独立公正的数据产权登记服务 赋能数据要素合规高效流通</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>50</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>26</td><td class="t">专家解读 | 坚持质量优先、合理审慎 提升数据产权登记公信力</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>50</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>27</td><td class="t">一图读懂 | 关于培育数据流通服务机构 加快推进数据要素市场化价值化的意见</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>50</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>28</td><td class="t">上海、北京同步推进数据条例修订：公共数据授权运营、数据资产登记入法</td><td>2026-10-01</td><td>征求意见</td><td>沪京经信/数据局官网</td><td>47</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>29</td><td class="t">市场监管总局对某互联网平台“二选一”行为作出行政处罚</td><td>2026-10-03</td><td>执法处罚</td><td>市场监管总局</td><td>46</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>30</td><td class="t">国家数据局《公共数据授权运营实施指引》：发布授权运营协议示范文本</td><td>2026-10-04</td><td>政策文件</td><td>国家数据局</td><td>45</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>31</td><td class="t">网信办《网络数据安全管理条例》配套实施细则：重要数据识别自评报告模板发布</td><td>2026-10-02</td><td>政策文件</td><td>国家网信办</td><td>45</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>32</td><td class="t">工信部发布大模型应用安全管理要求：上线前安全评估覆盖“深度合成+Agent 调用链”</td><td>2026-10-01</td><td>政策文件</td><td>工业和信息化部</td><td>45</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>33</td><td class="t">一图读懂 | 关于推进行业高质量数据集建设行动的实施方案</td><td>2026-10-07</td><td>政策文件</td><td>国家数据局</td><td>40</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>34</td><td class="t">DeepSeek 开源新一代多模态模型：代码与文档理解基准刷新</td><td>2026-10-04</td><td>技术动态</td><td>GitHub / 机器之心</td><td>15</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>35</td><td class="t">开源 AI Agent 编排框架登 GitHub 趋势榜（aihot.news 热点榜）</td><td>2026-10-03</td><td>技术动态</td><td>aihot.news / GitHub Trending</td><td>15</td><td>待核验 · 演示内容</td><td>未入选</td></tr></tbody></table>
+  <h3>排除清单（27 条，如实列示）</h3><ul class="excl"><li><b>专家解读 | 开展数据产权登记，助力数据要素价值释放</b>（66 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 体系化推进行业高质量数据集建设行动 强化数据赋能人工智能创新发展</b>（65 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 筑基智能时代，释放数据价值</b>（65 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 夯实数据基础，激活智能跃迁——《关于推进行业高质量数据集建设行动的实施方案》解读</b>（65 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 高质量数据构筑人工智能跃升新引擎 “数据飞轮”塑造高质量发展新动能</b>（65 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 以数据产权登记为抓手 探索商业银行数据资产化新路径</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 以统一数据产权登记体系 推动全国一体化数据市场建设</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 激活数据产权制度效能 共建全国一体化数据市场</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 筑牢数智底座 激活要素动能《关于推进行业高质量数据集建设行动的实施方案》解读</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 推动行业高质量数据集建设，实现与&quot;人工智能+&quot;同频共振——《关于推进行业高质量数据集建设行动的实施方案》解读</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 释放知识动能 护航数智发展—《关于推进行业高质量数据集建设行动的实施方案》解读</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 深耕高质量数据集建设 激活人工智能发展新动能</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 培育数据流通服务机构 繁荣数据市场生态</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 培育数据流通服务机构 推进数据要素市场化价值化</b>（60 分）— 衍生解读稿（答记者问/图解），不入报</li><li><b>专家解读 | 以登记指引夯实数据产权制度根基 以能源企业实践赋能数据价值释放</b>（50 分）— 衍生解读稿（答记者问/图解），不入报；相关度 50 低于阈值 55</li><li><b>专家解读 | 建立数据产权登记制度 夯实数据基础制度基石</b>（50 分）— 衍生解读稿（答记者问/图解），不入报；相关度 50 低于阈值 55</li><li><b>专家解读 | 以规范透明、独立公正的数据产权登记服务 赋能数据要素合规高效流通</b>（50 分）— 衍生解读稿（答记者问/图解），不入报；相关度 50 低于阈值 55</li><li><b>专家解读 | 坚持质量优先、合理审慎 提升数据产权登记公信力</b>（50 分）— 衍生解读稿（答记者问/图解），不入报；相关度 50 低于阈值 55</li><li><b>一图读懂 | 关于培育数据流通服务机构 加快推进数据要素市场化价值化的意见</b>（50 分）— 衍生解读稿（答记者问/图解），不入报；相关度 50 低于阈值 55</li><li><b>上海、北京同步推进数据条例修订：公共数据授权运营、数据资产登记入法</b>（47 分）— 相关度 47 低于阈值 55</li><li><b>市场监管总局对某互联网平台“二选一”行为作出行政处罚</b>（46 分）— 相关度 46 低于阈值 55</li><li><b>国家数据局《公共数据授权运营实施指引》：发布授权运营协议示范文本</b>（45 分）— 相关度 45 低于阈值 55</li><li><b>网信办《网络数据安全管理条例》配套实施细则：重要数据识别自评报告模板发布</b>（45 分）— 相关度 45 低于阈值 55</li><li><b>工信部发布大模型应用安全管理要求：上线前安全评估覆盖“深度合成+Agent 调用链”</b>（45 分）— 相关度 45 低于阈值 55</li><li><b>一图读懂 | 关于推进行业高质量数据集建设行动的实施方案</b>（40 分）— 衍生解读稿（答记者问/图解），不入报；相关度 40 低于阈值 55</li><li><b>DeepSeek 开源新一代多模态模型：代码与文档理解基准刷新</b>（15 分）— 相关度 15 低于阈值 55</li><li><b>开源 AI Agent 编排框架登 GitHub 趋势榜（aihot.news 热点榜）</b>（15 分）— 相关度 15 低于阈值 55</li></ul>
+</div>
+
+<div class="notebox">
+  <h3>编制说明与真实性声明</h3>
+  <p>1. 选取方式：2026年10月1日至2026年10月15日（回溯 15 天）窗口内共
+     35 条，按相关度 ≥55 自动选取
+     8 条，未设逐条勾选或"确认入报告"。</p>
+  <p>2. 排除情况：共排除 27 条，其中未核验/演示
+     0 条、低于阈值 13 条；
+     正式模式下未核验条目一律不入报。</p>
+  <p>3. 日期口径：日期口径：本期入选条目的发布日期依据为列表页明确标注 1 条、按上下文推断 3 条、来源未知（旧条目默认） 4 条、人工录入或订正 0 条；发布日期依据仅说明该日期的记录来源与可信度，不等于条目已完成核验，核验状态以逐条标注为准。</p>
+  <p>4. 数据口径：示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用；图表由本报告数据实时生成，未引用任何外部官方统计。</p>
+  <p>5. 免责：本报告由合规洞察工具自动生成，其中的解读与建议为工具生成的分析参考，不构成法律意见；规范依据以官方发布文本为准，未能核验的依据未在本报告中声称已核对。</p>
+  
+  <p class="muted">生成时间 2026-10-15 07:56 · 文本版（Word）与本可视化版由同一份报告模型渲染，内容同源。</p>
+</div>
+
+</div></body></html>
