@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据出境、生成式AI · 合规洞察报告（可视化版）</title>
+<style>
+:root{--bg:#faf9f6;--ink:#13191c;--sub:#5b6b70;--faint:#8a969a;--line:#dfe4e1;--gold:#b8873a;
+--gold-soft:#f5eedd;--coral:#d86a52;--coral-deep:#b3402a;--card:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:14px;line-height:1.75}
+a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px 80px}
+.cover{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);
+border-radius:0 0 14px 14px;padding:44px 40px 34px;text-align:center;margin-bottom:18px}
+.cover .kicker{font-size:12px;letter-spacing:6px;color:var(--gold);font-weight:700}
+.cover h1{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;line-height:1.45;margin:14px 0 4px;letter-spacing:.5px}
+.cover h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:22px;font-weight:700;letter-spacing:4px}
+.cover .issue{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:15px;color:var(--sub);margin-top:10px}
+.cover .meta{font-size:12.5px;color:var(--faint);margin-top:6px}
+.mode{display:inline-block;margin-top:14px;font-size:12px;border-radius:999px;padding:3px 12px;font-weight:700}
+.mode.warn{background:#fae9e4;color:var(--coral-deep)} .mode.ok{background:#eaf3ec;color:#3d7a52}
+.warn{background:#fae9e4;border:1px solid #f0c4b9;color:#8f3220;border-radius:10px;
+padding:12px 16px;font-size:13px;line-height:1.8;margin:0 0 18px;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.stat-n{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;font-weight:700;color:var(--gold)}
+.stat-l{font-size:12.5px;font-weight:700;margin-top:2px}
+.stat-s{font-size:11px;color:var(--faint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.card h2,.chapter h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cnt{font-size:12px;color:var(--faint);font-weight:400}
+.figcap{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.7}
+.note{font-size:11.5px;color:var(--coral-deep);background:#fae9e4;border-radius:8px;padding:6px 10px;margin-top:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+.item header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px}
+.meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--sub)}
+.badge{background:var(--ink);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700}
+.score{color:var(--gold);font-weight:800;font-size:14px}
+.tag{background:var(--gold-soft);color:var(--gold);border-radius:5px;padding:1px 8px;font-weight:600}
+.veri{border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.chip{border:1px solid var(--line);background:#f7f8f6;border-radius:999px;padding:1px 9px;font-size:11px;color:var(--sub)}
+.item h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:17.5px;line-height:1.6;margin-top:9px}
+.blk{margin-bottom:13px}
+.lab{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.blk p{font-size:13.5px;color:#202a2f;text-align:justify}
+.blk ul{font-size:13.5px;padding-left:20px;color:#202a2f}
+.blk li{margin-bottom:4px}
+.blk.tech{background:#f7f8f6;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.quote{background:#eaf3ec;border-left:3px solid #3d7a52;padding:9px 13px;border-radius:0 8px 8px 0;
+font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:13px;color:#2f5f40;margin-bottom:8px}
+.quote .loc{display:block;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:11px;color:#5f8a6d;margin-top:4px}
+.cite{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;padding:6px 0;
+border-bottom:1px dashed var(--line)}
+.tag.ok{background:#eaf3ec;color:#3d7a52} .tag.warn{background:var(--gold-soft);color:var(--gold)}
+.tag{border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.srcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;
+border-top:1px dashed var(--line);padding-top:11px}
+.srcbtn{background:var(--gold);color:#fff;border-radius:8px;padding:7px 15px;font-size:13px;font-weight:600}
+.srcbtn:hover{filter:brightness(.94);text-decoration:none}
+.srcbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.muted{color:var(--faint)}
+.empty{padding:34px;text-align:center;color:var(--sub)}
+.excl{font-size:12.5px;color:var(--sub);padding-left:20px;line-height:1.9}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f2f4f1;font-weight:700}
+td.t{max-width:340px}
+tr.out td{color:var(--faint)}
+.h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;margin:18px 0 8px}
+.notebox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;font-size:13px;color:var(--sub)}
+.notebox h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;color:var(--ink);margin-bottom:8px}
+.notebox p{margin-bottom:8px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.cover{padding:30px 20px}}
+@media print{body{background:#fff}.card,.item,.cover,.stat{break-inside:avoid}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+
+<div class="cover">
+  <div class="kicker">合规洞察 · 可视化版</div>
+  <h1>数据出境、生成式AI</h1>
+  <h2>合规洞察报告</h2>
+  <div class="issue">（2026年第19期）</div>
+  <div class="meta">监测窗口：2026年9月22日至2026年10月6日 ｜ 本期信息截至2026年10月6日 ｜ 生成时间：2026-10-06 11:41</div>
+  <div class="meta">报告模式：演示/工作稿（含待核验条目）</div>
+  <span class="mode warn">含待核验条目</span>
+</div>
+
+<div class="warn">本报告为**含待核验条目的演示/工作稿**：窗口内 17 条尚未完成原文核验，全部条目已逐条标注「待核验·演示内容」，未经核验不得对外作为当期监管动态引用；切换正式模式后这 17 条将被排除。</div>
+
+<div class="stats"><div class="stat"><div class="stat-n">17</div><div class="stat-l">窗口内条目</div><div class="stat-s">回溯窗口全部条目</div></div><div class="stat"><div class="stat-n">9</div><div class="stat-l">自动入选</div><div class="stat-s">相关度阈值 55</div></div><div class="stat"><div class="stat-n">17</div><div class="stat-l">未核验/演示</div><div class="stat-s">正式模式将排除</div></div><div class="stat"><div class="stat-n">64.2</div><div class="stat-l">平均相关度</div><div class="stat-s">入选条目均分</div></div></div>
+
+<div class="card">
+  <h2>窗口内条目趋势</h2>
+  <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="窗口内每日条目趋势"><rect width="720" height="240" fill="#ffffff"/><line x1="46" y1="186.0" x2="700" y2="186.0" stroke="#dfe4e1"/><text x="38" y="190.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="147.0" x2="700" y2="147.0" stroke="#dfe4e1"/><text x="38" y="151.0" text-anchor="end" font-size="10" fill="#5b6b70">1</text><line x1="46" y1="108.0" x2="700" y2="108.0" stroke="#dfe4e1"/><text x="38" y="112.0" text-anchor="end" font-size="10" fill="#5b6b70">2</text><line x1="46" y1="69.0" x2="700" y2="69.0" stroke="#dfe4e1"/><text x="38" y="73.0" text-anchor="end" font-size="10" fill="#5b6b70">3</text><line x1="46" y1="30.0" x2="700" y2="30.0" stroke="#dfe4e1"/><text x="38" y="34.0" text-anchor="end" font-size="10" fill="#5b6b70">4</text><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="67.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">09-22</text><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="143.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="143.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="155.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">09-24</text><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="230.9" y="147.0" width="22.7" height="39.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="242.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">09-26</text><rect x="274.5" y="147.0" width="22.7" height="39.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="274.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="318.1" y="147.0" width="22.7" height="39.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="318.1" y="147.0" width="22.7" height="39.0" fill="#b8873a" rx="2"/><text x="329.4" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">09-28</text><rect x="361.7" y="147.0" width="22.7" height="39.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="361.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="405.3" y="108.0" width="22.7" height="78.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="405.3" y="147.0" width="22.7" height="39.0" fill="#b8873a" rx="2"/><text x="416.6" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">09-30</text><rect x="448.9" y="108.0" width="22.7" height="78.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="448.9" y="147.0" width="22.7" height="39.0" fill="#b8873a" rx="2"/><rect x="492.5" y="108.0" width="22.7" height="78.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="492.5" y="147.0" width="22.7" height="39.0" fill="#b8873a" rx="2"/><text x="503.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-02</text><rect x="536.1" y="69.0" width="22.7" height="117.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="536.1" y="108.0" width="22.7" height="78.0" fill="#b8873a" rx="2"/><rect x="579.7" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="579.7" y="69.0" width="22.7" height="117.0" fill="#b8873a" rx="2"/><text x="591.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-04</text><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="666.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="666.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="678.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-06</text><rect x="46" y="210" width="10" height="10" fill="#b8873a" opacity=".35" rx="2"/><text x="61" y="219" font-size="10.5" fill="#5b6b70">窗口内全部条目</text><rect x="176" y="210" width="10" height="10" fill="#b8873a" rx="2"/><text x="191" y="219" font-size="10.5" fill="#5b6b70">自动入选条目</text></svg>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<div class="card">
+  <h2>入选条目类型分布</h2>
+  <svg viewBox="0 0 720 154" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="154" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">新法规</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">执法处罚</text><rect x="168" y="47" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="60" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="89" text-anchor="end" font-size="12" fill="#13191c">征求意见</text><rect x="168" y="77" width="314.7" height="16" fill="#b8873a" opacity="0.78" rx="3"/><text x="490.7" y="90" font-size="11.5" fill="#5b6b70">2</text><text x="158" y="119" text-anchor="end" font-size="12" fill="#13191c">政策文件</text><rect x="168" y="107" width="157.3" height="16" fill="#b8873a" opacity="0.67" rx="3"/><text x="333.3" y="120" font-size="11.5" fill="#5b6b70">1</text></svg>
+  <h2 style="margin-top:18px">命中业务线分布（内部评分口径，不含公司身份信息）</h2>
+  <svg viewBox="0 0 720 184" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="184" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">数据要素</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">5</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">数字建造平台</text><rect x="168" y="47" width="283.2" height="16" fill="#b8873a" opacity="0.76" rx="3"/><text x="459.2" y="60" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="89" text-anchor="end" font-size="12" fill="#13191c">信息化·网安</text><rect x="168" y="77" width="283.2" height="16" fill="#b8873a" opacity="0.76" rx="3"/><text x="459.2" y="90" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="119" text-anchor="end" font-size="12" fill="#13191c">AI应用</text><rect x="168" y="107" width="188.8" height="16" fill="#b8873a" opacity="0.69" rx="3"/><text x="364.8" y="120" font-size="11.5" fill="#5b6b70">2</text><text x="158" y="149" text-anchor="end" font-size="12" fill="#13191c">产业互联网·招采</text><rect x="168" y="137" width="188.8" height="16" fill="#b8873a" opacity="0.69" rx="3"/><text x="364.8" y="150" font-size="11.5" fill="#5b6b70">2</text></svg>
+  <div class="figcap">业务线为相关度评分的内部权重维度，用于排序，不代表已确认的业务事实。</div>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<section class="chapter"><h2>人工智能与算法监管动态<span class="cnt">2 条</span></h2>
+<article class="item" id="item-demo-d01">
+  <header>
+    <div class="meta">
+      <span class="badge">01</span>
+      <span class="score">73</span>
+      <span class="tag">新法规</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 中国网信网 · 2026-10-04</span>
+      <span class="chip">AI应用</span><span class="chip">数字建造平台</span>
+    </div>
+    <h3>网信办《生成式人工智能服务备案实施细化要求》发布：模型备案新增安全评估实测记录</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年9月28日，国家互联网信息办公室发布《生成式人工智能服务备案实施细化要求》。主要内容：（1）明确备案范围为面向境内公众提供生成式人工智能服务的组织，实行属地省级网信部门初审、国家网信办终审的两级流程；（2）规定备案材料清单，包括安全自评估报告（须按GB/T 45654—2025编制）、模型基本情况表、训练数据来源与合法性说明、标识义务落实情况说明、安全事件应急处置预案等；（3）明确重大变更情形须重新履行评估备案程序；（4）自2026年11月1日起施行，存量服务给予六个月过渡期。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属义务明确化而非新设义务：该文件系对《生成式人工智能服务管理暂行办法》（国家互联网信息办公室等七部门令第15号，自2023年8月15日起施行，以下简称《暂行办法》）第十七条“安全评估+备案”双重义务的程序性细化，本身未新增实体义务，但将备案材料标准化（第四项要求提交“安全评估报告及关键问答实测记录”），实质抬高了举证门槛。就义务主体而言，《暂行办法》第二条以“向境内公众提供生成文本、图片、音频、视频等内容的服务”界定服务提供者；公司面向集团外部客户提供的智能问答、智能报告生成功能属于义务主体范围，嵌入信息化项目交付的AI能力是否构成“面向公众提供服务”存在解释空间。配套义务链条已经闭合：算法备案（《互联网信息服务算法推荐管理规定》第二十四条）、内容标识（《人工智能生成合成内容标识办法》，自2025年9月1日起施行）、安全评估技术依据（GB/T 45654—2025，自2025年11月1日起实施）。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方两条业务线：平台对外提供的AI生成功能（触发条件：面向境内公众提供服务）与嵌入客户项目交付的AI能力（触发条件待解释）。对照现状：（1）公司尚未开展生成式人工智能服务备案；（2）现有安全评估材料未按GB/T 45654—2025体例编制，与备案清单存在差距；（3）投标场景已出现“供应商AI功能须已完成备案或承诺中标后限期完成”的资格条件，备案进度直接影响投标应答。违规后果：未履行备案义务的，依据《暂行办法》第二十一条，由主管部门依照《中华人民共和国网络安全法》（2025年修正，自2026年1月1日起施行）等追究法律责任。据公开信息，头部服务商均已闭环备案，备案已成为行业事实门槛。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）10月17日前完成存量及在研AI功能面向公众提供情况的排查建档（法务合规部牵头）；（2）对落入范围的产品，10月31日前完成安全自评估报告编制立项并启动属地网信部门沟通（科技研发部配合）；（3）10月24日前出具嵌入交付型AI功能是否构成“面向公众提供服务”的分析意见，同步修订投标合规承诺模板（法务合规部）；（4）本事项列为橙色风险（O-01），纳入合规义务台账（YW-01），按月更新进度。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……提供者应当提交安全评估报告及关键问答实测记录……（细化要求备案材料清单第四项）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d13">
+  <header>
+    <div class="meta">
+      <span class="badge">02</span>
+      <span class="score">60</span>
+      <span class="tag">执法处罚</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 执法动态 · 2026-09-28</span>
+      <span class="chip">AI应用</span><span class="chip">数字建造平台</span>
+    </div>
+    <h3>网信办通报算法推荐管理规定执法案例：两平台因未公示算法原理被限期整改</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年9月28日，国家网信办通报两起《互联网信息服务算法推荐管理规定》执法案例，案由均为未以显著方式公示算法基本原理，涉事平台被责令限期整改。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属执法口径确认：完成算法备案不免除公示义务。《互联网信息服务算法推荐管理规定》第十六条要求“以显著方式告知用户其提供算法推荐服务的情况，并以适当方式公示算法的基本原理、目的意图”；执法要点在于公示信息须与备案信息一致。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方推荐、排序功能页面（触发条件：平台提供算法推荐服务且已完成或应完成备案）。公司功能页尚未设置算法公示说明。</p></div><div class="blk"><div class="lab">建议</div><ul><li>对照备案信息补充推荐、排序功能页的算法公示说明（科技研发部与法务合规部，11月30日前）。纳入义务台账（YW-04），列为黄色风险（Y-01）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……通过备案的算法应当在显著位置公示其基本原理、目的意图和主要运行机制……（《互联网信息服务算法推荐管理规定》第十六条）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>数据要素与个人信息保护监管动态<span class="cnt">4 条</span></h2>
+<article class="item" id="item-demo-d04">
+  <header>
+    <div class="meta">
+      <span class="badge">03</span>
+      <span class="score">73</span>
+      <span class="tag">新法规</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 中国网信网 · 2026-10-03</span>
+      <span class="chip">数据要素</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>网信办《个人信息出境认证办法》：认证成为出境三条路径之一，11 月 1 日施行</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月3日，国家互联网信息办公室发布《个人信息出境认证办法》，自2026年11月1日起施行。主要内容包括：专业机构认证成为个人信息出境三条路径之一；认证机构名录与申请程序一并公布；存量业务自施行之日起60日内完成申报。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属体系补全：《中华人民共和国个人信息保护法》（2021年8月20日主席令第九十一号公布，自2021年11月1日起施行，以下简称《个人信息保护法》）第三十八条确立“安全评估、认证、标准合同”三路径框架，本办法将认证路径落地为可操作程序（第四条：处理者可通过国家网信部门认定的专业机构认证出境）。未按期申报的，依据《个人信息保护法》第六十六条处理，情节严重的最高可处五千万元或上一年度营业额百分之五罚款。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方涉境外节点的数据回流业务（触发条件：向境外提供个人信息且未走安全评估路径），涉及3条产品线。经初步排查，公司存量跨境传输均未完成三条路径中任何一种的合规手续，属红色风险。认证路径与标准合同路径的成本、周期对比及选型建议见可视化版报告第六区。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）10月17日前完成存量跨境业务逐项盘点（数据管理部）；（2）10月31日前完成三路径选型论证并出具书面意见（法务合规部牵头）；（3）选型后立即启动申报，确保12月31日窗口关闭前完成（责任部门按选型结果确定）；（4）列为红色风险（R-01），纳入义务台账（YW-05），每周向公司领导报告进度。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“第四条：个人信息处理者可以向国家网信部门认定的专业机构申请个人信息保护认证，作为向境外提供个人信息的合规路径。……存量业务应当自本办法施行之日起六十日内完成申报。”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d06">
+  <header>
+    <div class="meta">
+      <span class="badge">04</span>
+      <span class="score">65</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">最高人民法院 · 官网 · 2026-10-02</span>
+      <span class="chip">数据要素</span><span class="chip">产业互联网·招采</span>
+    </div>
+    <h3>最高法《数据权益保护司法解释（征求意见稿）》公开征求意见</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月2日，最高人民法院就《数据权益保护司法解释（征求意见稿）》向社会公开征求意见，反馈截止日期为2026年10月17日前后。征求意见稿首次在司法层面回应数据资源持有权、加工使用权、产品经营权的界定。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属立法进程：征求意见稿不具拘束力，但按既往惯例正式稿与征求意见稿核心条款重合度较高，宜按“准义务”预研。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项对我方属诉讼策略与确权路径的前瞻变量：平台数据产品的权属界定将直接影响交易结构与维权基础。</p></div><div class="blk"><div class="lab">建议</div><ul><li>10月17日前组织内部评审并提交行业意见（法务合规部）。纳入立法进程跟踪表，列为黄色风险（Y-05）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“征求意见稿首次在司法层面回应数据资源持有权、加工使用权、产品经营权的界定，明确数据权益的保护范围与侵权认定规则。”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.court.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d02">
+  <header>
+    <div class="meta">
+      <span class="badge">05</span>
+      <span class="score">57</span>
+      <span class="tag">政策文件</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家数据局 · 官网 · 2026-10-04</span>
+      <span class="chip">数据要素</span>
+    </div>
+    <h3>国家数据局《公共数据授权运营实施指引》：发布授权运营协议示范文本</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月4日，国家数据局发布《公共数据授权运营实施指引》，同步发布授权运营协议示范文本。指引明确公共数据授权运营的准入条件、运营机构遴选程序、收益分配与安全责任框架，并给出协议示范条款，供各地各部门在实施公共数据授权运营时参照执行。</p></div><div class="blk"><div class="lab">合规洞察</div><p>授权运营的法律基础仍是《数据安全法》第三十九条及地方公共数据立法，本指引属政策性文件，本身不创设行政许可，但其示范文本实质将成为各地谈判与审查的基准线——地方后续出台的实施方案大概率逐条对标。这意味着示范文本中的条款设计，事实上决定了未来两年公共数据授权交易的通行结构。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>对我方数据要素业务线而言，关注点集中在两类条款：一是收益分配条款，示范文本如何划分政府、运营机构、开发主体三方的收益比例，直接决定数据产品的定价空间；二是安全责任条款，授权期限届满后的数据处置义务（删除、返还、审计）将转化为运营成本与合同尾部风险。</p></div><div class="blk"><div class="lab">建议</div><ul><li>若公司有意申请成为授权运营机构，或与持牌机构合作开发数据产品，当前是准备资质材料的窗口期：指引发布后首批试点遴选通常向“材料完备、场景明确”的申请方倾斜。建议法务合规部牵头对照示范文本逐条预演合同立场，特别是数据处置义务与衍生数据归属两条。</li><li>① 法务合规部 10 月内完成示范文本逐条合同立场预演（重点：收益分配/安全责任/期满处置）｜② 数据要素业务线评估授权运营机构资质申请可行性｜③ 跟踪首批试点遴选公告</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……授权运营协议应当明确收益分配机制与安全责任边界……协议期满或者提前终止的，运营机构应当按照约定完成数据删除、返还与审计……（示范文本第五条、第十二条）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.nda.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article>
+<article class="item" id="item-demo-d09">
+  <header>
+    <div class="meta">
+      <span class="badge">06</span>
+      <span class="score">55</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">沪京经信/数据局官网 ·  · 2026-10-01</span>
+      <span class="chip">数据要素</span>
+    </div>
+    <h3>上海、北京同步推进数据条例修订：公共数据授权运营、数据资产登记入法</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月1日，上海、北京两地同步发布数据条例修订草案并公开征求意见。两地草案均写入公共数据授权运营制度与数据资产登记制度，与国家数据局近期指引形成“中央—地方”联动；但注册地与经营地的数据资产登记互认规则在两地草案中表述不一，尚待正式稿明确。</p></div><div class="blk"><div class="lab">合规洞察</div><p>两地条例修订的方向一致但接口未通：授权运营与资产登记同时入法，意味着数据要素的制度底座从国家层面下沉到地方执行层，但“登记在一地、经营在多地的”互认问题没有解决。草案阶段的分歧条款往往正是正式稿的博弈点，互认规则的走向直接影响跨区域数据业务的合规成本。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>对我方的影响是结构性的：若登记互认不明确，涉多地经营的平台数据资产将面临“重复登记”或“登记效力存疑”两种不利情形，无论哪种都会抬高交易成本。此时抢先在某一地完成登记，反而可能在互认规则落地后陷入被动（登记口径不一致需返工）。</p></div><div class="blk"><div class="lab">建议</div><ul><li>建议策略明确为“暂缓落地、跟踪规则”：涉多地经营的数据资产登记路径暂缓实施，待互认规则明确后一次性申报；同时在征求意见期内通过行业渠道反馈互认条款诉求——地方条例征求意见是少数能直接影响登记规则设计的机会窗口。</li><li>① 数据资产登记路径暂缓落地（数据要素业务线）｜② 10 月内通过行业协会/商会渠道反馈互认条款意见（法务合规部）｜③ 跟踪两地正式稿出台时间，互认明确后一次申报</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……数据资产登记实行一地登记、多地互认（具体办法另行制定）……（上海草案相关条款，北京草案对应条款表述为“按照国家统一登记规则执行”）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://sheitc.sh.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>网络与数据安全监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-demo-d10">
+  <header>
+    <div class="meta">
+      <span class="badge">07</span>
+      <span class="score">69</span>
+      <span class="tag">新法规</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办 · 2026-09-30 施行 · 2026-09-30</span>
+      <span class="chip">信息化·网安</span><span class="chip">数据要素</span>
+    </div>
+    <h3>网信办《个人信息保护合规审计管理办法》施行：处理超千万个人信息须年度强制审计</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>《个人信息保护合规审计管理办法》自2026年9月30日起施行，处理超过一千万条个人信息的处理者须每年至少开展一次合规审计，审计报告及整改记录保存不少于三年。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属义务可操作化：办法将《个人信息保护法》第五十四条的合规审计义务落为可核查程序——规模门槛（一千万条）、频次（每年至少一次）、方式（自审或委托专业机构）、留存要求（不少于三年）四要素齐备。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方全部涉个人信息处理业务（触发条件：处理数量超一千万条，公司用户规模已达标）。首次自审尚未开展，审计底稿与整改记录归档机制待建立。</p></div><div class="blk"><div class="lab">建议</div><ul><li>第四季度完成首次自审立项并明确底稿归档规则（法务合规部牵头，11月15日前形成审计方案）。纳入义务台账（YW-07），列为橙色风险（O-04）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“处理超过一千万条个人信息的处理者，应当每年至少开展一次个人信息保护合规审计；审计报告及整改记录保存期限不少于三年。”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>平台经济与市场秩序监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-demo-d05">
+  <header>
+    <div class="meta">
+      <span class="badge">08</span>
+      <span class="score">58</span>
+      <span class="tag">执法处罚</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">市场监管总局 · 总局官网 · 2026-10-03</span>
+      <span class="chip">产业互联网·招采</span>
+    </div>
+    <h3>市场监管总局对某互联网平台“二选一”行为作出行政处罚</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年10月3日，市场监管总局依据《中华人民共和国反垄断法》第二十二条认定某平台滥用市场支配地位限定交易，作出行政处罚决定。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属执法延续：限定交易的认定标准未见放松，《禁止滥用市场支配地位行为规定》第十四条禁止“无正当理由限定交易相对人”，独家长期协议的“正当理由”抗辩空间有限。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项对我方属合同合规提示：平台撮合业务中的独家合作、排他协议模板须逐条自查（触发条件：合同含排他或独家条款）。</p></div><div class="blk"><div class="lab">建议</div><ul><li>11月15日前完成独家合作条款模板自查，长期独家协议增设退出机制（法务合规部）。列为黄色风险（Y-03）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……禁止具有市场支配地位的经营者没有正当理由，限定交易相对人只能与其进行交易……（《反垄断法》第二十二条）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.samr.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>数字建造与行业应用监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-demo-d03">
+  <header>
+    <div class="meta">
+      <span class="badge">09</span>
+      <span class="score">68</span>
+      <span class="tag">执法处罚</span>
+      <span class="veri" style="color:#b3402a;background:#fae9e4">● 待核验 · 演示内容</span>
+      <span class="muted">国家网信办等四部门 · 2025-09-01 施行 · 2026-10-04</span>
+      <span class="chip">数字建造平台</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>《人工智能生成合成内容标识办法》施行首日：多家平台上线强制标注功能</h3>
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>《人工智能生成合成内容标识办法》（国家网信办等四部门2025年3月7日公布，自2025年9月1日起施行）运行满一年，本期监管通报显示多家平台完成强制标注功能改造，显式标识与含元数据的隐式标识同步落地，配套强制性国家标准GB 45438—2025同步实施。</p></div><div class="blk"><div class="lab">合规洞察</div><p>较此前规则，本项属义务持续履行阶段：办法第九条课以网络信息内容传播平台“核验生成合成内容是否含有规定的标识”的义务，属持续性作为义务；未履行核验义务提供传播服务的，依据《中华人民共和国网络安全法》第六十五条处理。GB 45438—2025作为强制性国家标准，使标识义务具备可检测的技术基准。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本项直接影响我方平台内容发布链路（触发条件：平台提供用户生成内容与AI生成内容复合服务）。公司发布链路尚未嵌入标识检测能力，用户协议与社区规则亦未同步标识条款。行业层面，本期通报显示主要平台均已完成改造，标识核验已成为平台标配能力。</p></div><div class="blk"><div class="lab">建议</div><ul><li>（1）11月15日前完成发布链路标识检测改造立项（科技研发部牵头）；（2）同步修订用户协议、社区规则中的AI生成内容条款（法务合规部）；（3）纳入义务台账（YW-02），状态“未启动”，列为橙色风险（O-02）。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“……网络信息内容传播平台应当核验生成合成内容是否含有本办法规定的标识……（办法第九条）”<span class="loc"></span></blockquote></div>
+  <footer class="srcrow"><span class="muted">原文直链待核验（不得以机构页面冒充原文链接）</span><a class="srcbtn ghost" href="https://www.cac.gov.cn/" target="_blank" rel="noopener">打开机构/栏目页面 ↗</a>
+    <span class="muted">核验说明：演示条目：来自 design/ 原型，原文直链与发布主体待人工核验</span>
+  </footer>
+</article></section>
+
+<div class="card">
+  <h2>下一步工作建议</h2>
+  <ol class="excl"><li>跟踪落实「网信办《生成式人工智能服务备案实施细化要求》发布：模」：（1）10月17日前完成存量及在研AI功能面向公众提供情况的排查建档（法务合规部牵头）；（2）对落入范围的产品，10月31日前完成安全自评估报告编制立项并启动属地网信部门沟通（…</li><li>跟踪落实「网信办《个人信息出境认证办法》：认证成为出境三条路径」：（1）10月17日前完成存量跨境业务逐项盘点（数据管理部）；（2）10月31日前完成三路径选型论证并出具书面意见（法务合规部牵头）；（3）选型后立即启动申报，确保12月31日窗…</li><li>跟踪落实「网信办《个人信息保护合规审计管理办法》施行：处理超千」：第四季度完成首次自审立项并明确底稿归档规则（法务合规部牵头，11月15日前形成审计方案）。纳入义务台账（YW-07），列为橙色风险（O-04）。</li><li>跟踪落实「《人工智能生成合成内容标识办法》施行首日：多家平台上」：（1）11月15日前完成发布链路标识检测改造立项（科技研发部牵头）；（2）同步修订用户协议、社区规则中的AI生成内容条款（法务合规部）；（3）纳入义务台账（YW-02），状态“…</li><li>跟踪落实「最高法《数据权益保护司法解释（征求意见稿）》公开征求」：10月17日前组织内部评审并提交行业意见（法务合规部）。纳入立法进程跟踪表，列为黄色风险（Y-05）。</li><li>跟踪落实「网信办通报算法推荐管理规定执法案例：两平台因未公示算」：对照备案信息补充推荐、排序功能页的算法公示说明（科技研发部与法务合规部，11月30日前）。纳入义务台账（YW-04），列为黄色风险（Y-01）。</li><li>跟踪落实「市场监管总局对某互联网平台“二选一”行为作出行政处罚」：11月15日前完成独家合作条款模板自查，长期独家协议增设退出机制（法务合规部）。列为黄色风险（Y-03）。</li><li>跟踪落实「国家数据局《公共数据授权运营实施指引》：发布授权运营」：若公司有意申请成为授权运营机构，或与持牌机构合作开发数据产品，当前是准备资质材料的窗口期：指引发布后首批试点遴选通常向“材料完备、场景明确”的申请方倾斜。建议法务合规部牵头对照…</li><li>跟踪落实「上海、北京同步推进数据条例修订：公共数据授权运营、数」：建议策略明确为“暂缓落地、跟踪规则”：涉多地经营的数据资产登记路径暂缓实施，待互认规则明确后一次性申报；同时在征求意见期内通过行业渠道反馈互认条款诉求——地方条例征求意见是少数…</li></ol>
+  <div class="figcap">以上为按入选条目自动汇总的跟踪提示，落实情况需人工确认，本报告不主张任何事项已完成。</div>
+</div>
+
+<div class="card">
+  <h2>附录：本期信息索引（含未入选条目）</h2>
+  <table><thead><tr><th>#</th><th>标题</th><th>日期</th><th>类型</th><th>发布主体</th>
+  <th>相关度</th><th>核验状态</th><th>结果</th></tr></thead><tbody><tr class="in"><td>1</td><td class="t">网信办《生成式人工智能服务备案实施细化要求》发布：模型备案新增安全评估实测记录</td><td>2026-10-04</td><td>新法规</td><td>国家网信办</td><td>73</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>2</td><td class="t">网信办《个人信息出境认证办法》：认证成为出境三条路径之一，11 月 1 日施行</td><td>2026-10-03</td><td>新法规</td><td>国家网信办</td><td>73</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>3</td><td class="t">网信办《个人信息保护合规审计管理办法》施行：处理超千万个人信息须年度强制审计</td><td>2026-09-30</td><td>新法规</td><td>国家网信办</td><td>69</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>4</td><td class="t">《人工智能生成合成内容标识办法》施行首日：多家平台上线强制标注功能</td><td>2026-10-04</td><td>执法处罚</td><td>国家网信办等四部门</td><td>68</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>5</td><td class="t">最高法《数据权益保护司法解释（征求意见稿）》公开征求意见</td><td>2026-10-02</td><td>征求意见</td><td>最高人民法院</td><td>65</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>6</td><td class="t">网信办通报算法推荐管理规定执法案例：两平台因未公示算法原理被限期整改</td><td>2026-09-28</td><td>执法处罚</td><td>国家网信办</td><td>60</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>7</td><td class="t">市场监管总局对某互联网平台“二选一”行为作出行政处罚</td><td>2026-10-03</td><td>执法处罚</td><td>市场监管总局</td><td>58</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>8</td><td class="t">国家数据局《公共数据授权运营实施指引》：发布授权运营协议示范文本</td><td>2026-10-04</td><td>政策文件</td><td>国家数据局</td><td>57</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="in"><td>9</td><td class="t">上海、北京同步推进数据条例修订：公共数据授权运营、数据资产登记入法</td><td>2026-10-01</td><td>征求意见</td><td>沪京经信/数据局官网</td><td>55</td><td>待核验 · 演示内容</td><td>入选</td></tr><tr class="out"><td>10</td><td class="t">工信部通报第 N 批侵害用户权益 APP/SDK：违规收集个人信息、强制索权 37 款</td><td>2026-09-30</td><td>执法处罚</td><td>工业和信息化部</td><td>54</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>11</td><td class="t">网信办《网络数据安全管理条例》配套实施细则：重要数据识别自评报告模板发布</td><td>2026-10-02</td><td>政策文件</td><td>国家网信办</td><td>53</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>12</td><td class="t">工信部发布大模型应用安全管理要求：上线前安全评估覆盖“深度合成+Agent 调用链”</td><td>2026-10-01</td><td>政策文件</td><td>工业和信息化部</td><td>53</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>13</td><td class="t">财政部《企业数据资源相关会计处理规定》应用指南：数据资产入表细化至三类情形</td><td>2026-09-29</td><td>政策文件</td><td>财政部</td><td>53</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>14</td><td class="t">欧盟 Digital Omnibus：AI Act 高风险义务推迟至 2027-12 / 2028-08 施行</td><td>2026-09-27</td><td>域外动态</td><td>欧盟官方公报 EUR-Lex</td><td>53</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>15</td><td class="t">美国 FTC 发布算法歧视执法声明：将歧视性 AI 决策纳入 FTC Act 第 5 节规制</td><td>2026-09-26</td><td>域外动态</td><td>FTC 官网</td><td>53</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>16</td><td class="t">DeepSeek 开源新一代多模态模型：代码与文档理解基准刷新</td><td>2026-10-04</td><td>技术动态</td><td>GitHub / 机器之心</td><td>17</td><td>待核验 · 演示内容</td><td>未入选</td></tr><tr class="out"><td>17</td><td class="t">开源 AI Agent 编排框架登 GitHub 趋势榜（aihot.news 热点榜）</td><td>2026-10-03</td><td>技术动态</td><td>aihot.news / GitHub Trending</td><td>17</td><td>待核验 · 演示内容</td><td>未入选</td></tr></tbody></table>
+  <h3>排除清单（8 条，如实列示）</h3><ul class="excl"><li><b>工信部通报第 N 批侵害用户权益 APP/SDK：违规收集个人信息、强制索权 37 款</b>（54 分）— 相关度 54 低于阈值 55</li><li><b>网信办《网络数据安全管理条例》配套实施细则：重要数据识别自评报告模板发布</b>（53 分）— 相关度 53 低于阈值 55</li><li><b>工信部发布大模型应用安全管理要求：上线前安全评估覆盖“深度合成+Agent 调用链”</b>（53 分）— 相关度 53 低于阈值 55</li><li><b>财政部《企业数据资源相关会计处理规定》应用指南：数据资产入表细化至三类情形</b>（53 分）— 相关度 53 低于阈值 55</li><li><b>欧盟 Digital Omnibus：AI Act 高风险义务推迟至 2027-12 / 2028-08 施行</b>（53 分）— 相关度 53 低于阈值 55</li><li><b>美国 FTC 发布算法歧视执法声明：将歧视性 AI 决策纳入 FTC Act 第 5 节规制</b>（53 分）— 相关度 53 低于阈值 55</li><li><b>DeepSeek 开源新一代多模态模型：代码与文档理解基准刷新</b>（17 分）— 相关度 17 低于阈值 55</li><li><b>开源 AI Agent 编排框架登 GitHub 趋势榜（aihot.news 热点榜）</b>（17 分）— 相关度 17 低于阈值 55</li></ul>
+</div>
+
+<div class="notebox">
+  <h3>编制说明与真实性声明</h3>
+  <p>1. 选取方式：2026年9月22日至2026年10月6日（回溯 15 天）窗口内共
+     17 条，按相关度 ≥55 自动选取
+     9 条，未设逐条勾选或"确认入报告"。</p>
+  <p>2. 排除情况：共排除 8 条，其中未核验/演示
+     0 条、低于阈值 8 条；
+     正式模式下未核验条目一律不入报。</p>
+  <p>3. 数据口径：示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用；图表由本报告数据实时生成，未引用任何外部官方统计。</p>
+  <p>4. 免责：本报告由合规洞察工具自动生成，其中的解读与建议为工具生成的分析参考，不构成法律意见；规范依据以官方发布文本为准，未能核验的依据未在本报告中声称已核对。</p>
+  <p class="muted">生成时间 2026-10-06 11:41 · 文本版（Word）与本可视化版由同一份报告模型渲染，内容同源。</p>
+</div>
+
+</div></body></html>

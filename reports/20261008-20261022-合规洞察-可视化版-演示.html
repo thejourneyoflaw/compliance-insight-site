@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>综合监管动态 · 合规洞察报告（可视化版）</title>
+<style>
+:root{--bg:#faf9f6;--ink:#13191c;--sub:#5b6b70;--faint:#8a969a;--line:#dfe4e1;--gold:#b8873a;
+--gold-soft:#f5eedd;--coral:#d86a52;--coral-deep:#b3402a;--card:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:14px;line-height:1.75}
+a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px 80px}
+.cover{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);
+border-radius:0 0 14px 14px;padding:44px 40px 34px;text-align:center;margin-bottom:18px}
+.cover .kicker{font-size:12px;letter-spacing:6px;color:var(--gold);font-weight:700}
+.cover h1{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;line-height:1.45;margin:14px 0 4px;letter-spacing:.5px}
+.cover h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:22px;font-weight:700;letter-spacing:4px}
+.cover .issue{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:15px;color:var(--sub);margin-top:10px}
+.cover .meta{font-size:12.5px;color:var(--faint);margin-top:6px}
+.mode{display:inline-block;margin-top:14px;font-size:12px;border-radius:999px;padding:3px 12px;font-weight:700}
+.mode.warn{background:#fae9e4;color:var(--coral-deep)} .mode.ok{background:#eaf3ec;color:#3d7a52}
+.warn{background:#fae9e4;border:1px solid #f0c4b9;color:#8f3220;border-radius:10px;
+padding:12px 16px;font-size:13px;line-height:1.8;margin:0 0 18px;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center}
+.stat-n{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:30px;font-weight:700;color:var(--gold)}
+.stat-l{font-size:12.5px;font-weight:700;margin-top:2px}
+.stat-s{font-size:11px;color:var(--faint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.card h2,.chapter h2{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.cnt{font-size:12px;color:var(--faint);font-weight:400}
+.figcap{font-size:12px;color:var(--sub);margin-top:8px;line-height:1.7}
+.note{font-size:11.5px;color:var(--coral-deep);background:#fae9e4;border-radius:8px;padding:6px 10px;margin-top:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+.item header{border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px}
+.meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--sub)}
+.badge{background:var(--ink);color:#fff;border-radius:5px;padding:1px 7px;font-weight:700}
+.score{color:var(--gold);font-weight:800;font-size:14px}
+.tag{background:var(--gold-soft);color:var(--gold);border-radius:5px;padding:1px 8px;font-weight:600}
+.veri{border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.chip{border:1px solid var(--line);background:#f7f8f6;border-radius:999px;padding:1px 9px;font-size:11px;color:var(--sub)}
+.item h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:17.5px;line-height:1.6;margin-top:9px}
+.blk{margin-bottom:13px}
+.lab{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--gold);margin-bottom:5px}
+.blk p{font-size:13.5px;color:#202a2f;text-align:justify}
+.blk ul{font-size:13.5px;padding-left:20px;color:#202a2f}
+.blk li{margin-bottom:4px}
+.blk.tech{background:#f7f8f6;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+.quote{background:#eaf3ec;border-left:3px solid #3d7a52;padding:9px 13px;border-radius:0 8px 8px 0;
+font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:13px;color:#2f5f40;margin-bottom:8px}
+.quote .loc{display:block;font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;font-size:11px;color:#5f8a6d;margin-top:4px}
+.cite{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12.5px;padding:6px 0;
+border-bottom:1px dashed var(--line)}
+.tag.ok{background:#eaf3ec;color:#3d7a52} .tag.warn{background:var(--gold-soft);color:var(--gold)}
+.tag{border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700}
+.srcrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;
+border-top:1px dashed var(--line);padding-top:11px}
+.srcbtn{background:var(--gold);color:#fff;border-radius:8px;padding:7px 15px;font-size:13px;font-weight:600}
+.srcbtn:hover{filter:brightness(.94);text-decoration:none}
+.srcbtn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.muted{color:var(--faint)}
+.empty{padding:34px;text-align:center;color:var(--sub)}
+.excl{font-size:12.5px;color:var(--sub);padding-left:20px;line-height:1.9}
+table{width:100%;border-collapse:collapse;font-size:12px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f2f4f1;font-weight:700}
+td.t{max-width:340px}
+tr.out td{color:var(--faint)}
+.h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;margin:18px 0 8px}
+.notebox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;font-size:13px;color:var(--sub)}
+.notebox h3{font-family:"Songti SC","STSong","SimSun","Noto Serif SC",serif;font-size:16px;color:var(--ink);margin-bottom:8px}
+.notebox p{margin-bottom:8px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.cover{padding:30px 20px}}
+@media print{body{background:#fff}.card,.item,.cover,.stat{break-inside:avoid}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div class="wrap">
+
+<div class="cover">
+  <div class="kicker">合规洞察 · 可视化版</div>
+  <h1>综合监管动态</h1>
+  <h2>合规洞察报告</h2>
+  <div class="issue">（未编号期次）</div>
+  <div class="meta">监测窗口：2026年10月8日至2026年10月22日 ｜ 本期信息截至2026年10月22日 ｜ 生成时间：2026-10-22 06:06</div>
+  <div class="meta">报告模式：演示/工作稿（含待核验条目）</div>
+  <span class="mode warn">含待核验条目</span>
+</div>
+
+<div class="warn">本报告为**含待核验条目的演示/工作稿**：窗口内 8 条尚未完成原文核验，全部条目已逐条标注「待核验·演示内容」，未经核验不得对外作为当期监管动态引用；切换正式模式后这 8 条将被排除。</div>
+
+<div class="stats"><div class="stat"><div class="stat-n">8</div><div class="stat-l">窗口内条目</div><div class="stat-s">回溯窗口全部条目</div></div><div class="stat"><div class="stat-n">5</div><div class="stat-l">自动入选</div><div class="stat-s">相关度阈值 55</div></div><div class="stat"><div class="stat-n">8</div><div class="stat-l">未核验/演示</div><div class="stat-s">正式模式将排除</div></div><div class="stat"><div class="stat-n">62.4</div><div class="stat-l">平均相关度</div><div class="stat-s">入选条目均分</div></div></div>
+
+<div class="card">
+  <h2>窗口内条目趋势</h2>
+  <svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="窗口内每日条目趋势"><rect width="720" height="240" fill="#ffffff"/><line x1="46" y1="186.0" x2="700" y2="186.0" stroke="#dfe4e1"/><text x="38" y="190.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="147.0" x2="700" y2="147.0" stroke="#dfe4e1"/><text x="38" y="151.0" text-anchor="end" font-size="10" fill="#5b6b70">0</text><line x1="46" y1="108.0" x2="700" y2="108.0" stroke="#dfe4e1"/><text x="38" y="112.0" text-anchor="end" font-size="10" fill="#5b6b70">1</text><line x1="46" y1="69.0" x2="700" y2="69.0" stroke="#dfe4e1"/><text x="38" y="73.0" text-anchor="end" font-size="10" fill="#5b6b70">2</text><line x1="46" y1="30.0" x2="700" y2="30.0" stroke="#dfe4e1"/><text x="38" y="34.0" text-anchor="end" font-size="10" fill="#5b6b70">3</text><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="56.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="67.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-08</text><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="100.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="143.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="143.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="155.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-10</text><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="187.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="230.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="242.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-12</text><rect x="274.5" y="134.0" width="22.7" height="52.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="274.5" y="134.0" width="22.7" height="52.0" fill="#b8873a" rx="2"/><rect x="318.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="318.1" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="329.4" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-14</text><rect x="361.7" y="30.0" width="22.7" height="156.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="361.7" y="82.0" width="22.7" height="104.0" fill="#b8873a" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="405.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="416.6" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-16</text><rect x="448.9" y="134.0" width="22.7" height="52.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="448.9" y="134.0" width="22.7" height="52.0" fill="#b8873a" rx="2"/><rect x="492.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="492.5" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="503.8" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-18</text><rect x="536.1" y="134.0" width="22.7" height="52.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="536.1" y="134.0" width="22.7" height="52.0" fill="#b8873a" rx="2"/><rect x="579.7" y="134.0" width="22.7" height="52.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="579.7" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="591.0" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-20</text><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="623.3" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><rect x="666.9" y="134.0" width="22.7" height="52.0" fill="#b8873a" opacity=".35" rx="2"/><rect x="666.9" y="186.0" width="22.7" height="0.0" fill="#b8873a" rx="2"/><text x="678.2" y="202" text-anchor="middle" font-size="9.5" fill="#5b6b70">10-22</text><rect x="46" y="210" width="10" height="10" fill="#b8873a" opacity=".35" rx="2"/><text x="61" y="219" font-size="10.5" fill="#5b6b70">窗口内全部条目</text><rect x="176" y="210" width="10" height="10" fill="#b8873a" rx="2"/><text x="191" y="219" font-size="10.5" fill="#5b6b70">自动入选条目</text></svg>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<div class="card">
+  <h2>入选条目类型分布</h2>
+  <svg viewBox="0 0 720 94" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="94" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">征求意见</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">4</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">行业动态</text><rect x="168" y="47" width="118.0" height="16" fill="#b8873a" opacity="0.64" rx="3"/><text x="294.0" y="60" font-size="11.5" fill="#5b6b70">1</text></svg>
+  <h2 style="margin-top:18px">命中业务线分布（内部评分口径，不含公司身份信息）</h2>
+  <svg viewBox="0 0 720 184" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="184" fill="#ffffff"/><text x="158" y="29" text-anchor="end" font-size="12" fill="#13191c">信息化·网安</text><rect x="168" y="17" width="472.0" height="16" fill="#b8873a" opacity="0.90" rx="3"/><text x="648.0" y="30" font-size="11.5" fill="#5b6b70">4</text><text x="158" y="59" text-anchor="end" font-size="12" fill="#13191c">数据要素</text><rect x="168" y="47" width="354.0" height="16" fill="#b8873a" opacity="0.81" rx="3"/><text x="530.0" y="60" font-size="11.5" fill="#5b6b70">3</text><text x="158" y="89" text-anchor="end" font-size="12" fill="#13191c">AI应用</text><rect x="168" y="77" width="236.0" height="16" fill="#b8873a" opacity="0.73" rx="3"/><text x="412.0" y="90" font-size="11.5" fill="#5b6b70">2</text><text x="158" y="119" text-anchor="end" font-size="12" fill="#13191c">产业互联网·招采</text><rect x="168" y="107" width="118.0" height="16" fill="#b8873a" opacity="0.64" rx="3"/><text x="294.0" y="120" font-size="11.5" fill="#5b6b70">1</text><text x="158" y="149" text-anchor="end" font-size="12" fill="#13191c">涉外合规</text><rect x="168" y="137" width="118.0" height="16" fill="#b8873a" opacity="0.64" rx="3"/><text x="294.0" y="150" font-size="11.5" fill="#5b6b70">1</text></svg>
+  <div class="figcap">业务线为相关度评分的内部权重维度，用于排序，不代表已确认的业务事实。</div>
+  <div class="note">示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用</div>
+</div>
+
+<section class="chapter"><h2>人工智能与算法监管动态<span class="cnt">2 条</span></h2>
+<article class="item" id="item-itm-20261015-4966">
+  <header>
+    <div class="meta">
+      <span class="badge">01</span>
+      <span class="score">69</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-15</span>
+      <span class="chip">AI应用</span><span class="chip">数据要素</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>全国网络安全标准化技术委员会2026年第二次“标准周”活动圆满收官</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>2026年9月15日至18日，全国网络安全标准化技术委员会（简称“全国网安标委”）2026年第二次“标准周”活动在山东省济南市举办。本次“标准周”活动由全国网安标委主办，中国电子技术标准化研究院承办，中国互联网发展基金会网络安全专项基金支持。全国网安标委副主任委员和委员、秘书长和副秘书长、工作组组长和副组长、成员单位代表，中央网信办网络安全协调局、市场监管总局标准创新管理司和济南市负责同志共900余人参加。
+9月15日上午，召开标准周全体成员会议。全国网安标委主任委员、中央网信办副主任、国家网信办副主任王京涛出席并讲话，国家市场监督管理总局标准创新管理司相关负责同志出席会议，济南市委副书记杨峰致欢迎辞，中国电子技术标准化研究院院长刘贤刚主持会议。会上，受邀专家围绕新一代商用密码算法、网络安全产品互联互通、科学智能（AI4S）的进展与安全、具身智能和智能体安全、面向人工智能的网络安全技术与产品演进、2026年中国网络安全产业发展等主题分享技术方案和标准化实践。
+9月15日下午，召开电子产品信息清除分论坛。中央网信办网络安全协调局副局长屠守中出席会议并发表主题演讲，国家市场监管总局标准创新管理司相关负责同志出席会议，中国电子技术标准化研究院副院长范科峰出席会议并致欢迎词，中国电子技术标准化研究院网络安全中心副主任李琳主持会议。论坛邀请来自电子标准院、中国银行、中资环集团、华为终端等企事业单位代表分享了GB 46864-2025实施筹备、国际标准化推进、产品功能开发、二手电子产品回收信息清除管理以及金融行业设备退装信息清除实践等相关内容。会上还发起了电子产品信息清除行业自律倡议，发布了电子产品信息清除公共服务平台，对GB 46864-2025强标配套落地实施的3项网络安全标准实践指南进行了发布解读，开展了以“守护电子产品信息安全与清除实施的关键点和突破口”为主题的圆桌讨论。
+9月15日至16日，召开密码技术标准工作组（WG3）第二次全体会议。来自50余家成员单位的80余名代表参加会议。会议审议推进了4项标准草案、1项征求意见稿，组织对1项标准研究课题开展了研讨，对2026年已发布的5项密码国家标准进行了解读和宣贯，讨论了密码标准体系。会议评选出张立廷（中电科网络安全科技股份有限公司）、王妮娜（兴唐通信科技有限公司）2名先进个人。
+9月15日至16日，召开鉴别与授权标准工作组（WG4）第二次全体会议。工作组组长荆继武、副组长李新友参加并主持了会议，共有50余名代表报名参会。会议审议推进了3项标准草案、3项征求意见稿，组织对1项标准研究课题、2项标准立项需求开展了研讨。会议评选出王琼霄（北京数字认证股份有限公司）1名先进个人。
+9月15日至17日，召开网络安全评估标准工作组（WG5）第二次全体会议。工作组副组长布宁、李斌、陆臻、唐刚参加并主持了会议，共有240余名代表报名参会。会议审议推进了在研标准11项，其中9项标准草案、2项征求意见稿；讨论了6项征求意见稿标准，组织对4项标准研究课题开展了研讨。会议评选出叶同坤（杭州迪普科技股份有限公司）、申永波（中国网络安全审查认证和市场监管大数据中心）2名先进个人。
+9月15日至16日，召开通信安全标准工作组（WG6）第二次全体会议。工作组组长于生多、副组长舒敏、赵莹参加并主持了会议，共有30余名代表报名参会。会议审议讨论了3项标准草案，组织对标准研究课题《互联网基础资源安全标准体系研究》开展了研讨。会议评选出魏瑛（中移量子科技有限公司）1名先进个人。
+9月15日至16日，召开网络安全管理标准工作组（WG7）第二次全体会议。工作组组长姚相振、副组长闵京华、杨晨、邱勤参加并主持了会议，共有190余名代表报名参会。会议审议推进了4项标准草案、3项征求意见稿，对4项标准项目进行了讨论，组织对3项标准研究课题开展了研讨。会议评选出刘吉林（杭州迪普科技股份有限公司）1名先进个人。
+9月15日至17日，召开数据安全标准工作组（WG8）第二次全体会议。工作组组长王建民、副组长陈兴蜀、林志强、魏薇、胡光俊参加并主持了会议，共有260余名代表报名参会。会议审议推进了14项标准草案、6项征求意见稿。会议评选出王洒洒（上海计算机软件技术开发中心）、张灵子（飞利浦（中国）投资有限公司）2名先进个人。
+9月15日至16日，召开人工智能安全标准工作组（WG9）第四次全体会议。工作组组长周伯文、副组长张震、盛小宝、侯元伟参加并主持了会议，共有340余名代表报名参加了本次会议。会议审议推进了12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿，对人工智能安全标准体系、1项强制性国家标准、16项推荐性国家标准、8项国家标准化指导性技术文件进行了讨论，组织对5项标准研究课题开展了研讨。会议评选出杨波（中国移动研究院）、闵京华（北京青囊风华文化传媒有限公司）2名先进个人。
+9月15日至17日，召开新技术安全标准特别工作组（SWG-ETS）第二次全体会议。工作组组长刘勇，副组长伍扬、张格、王永剑、石竑松出席并主持会议，共有150余名代表报名参会。会议审议推进了1项征求意见稿、1项送审稿，对3项标准项目进行了讨论，组织对1项标准研究课题与WG3共同开展了联合评审。会议同期开设量子安全、云安全、新技术安全三场专题研讨会，聚焦量子计算安全、云安全与云原生、卫星互联网、低空产业等新兴领域安全议题，汇聚业内专家开展前沿研讨与成果分享，探索新技术安全标准化需求，进一步完善标准体系。会议评选出卢夏（国家信息技术安全研究中心）1名先进个人。
+9月15日至16日，召开网络安全国际标准研究组（SG1）第三次全体会议。研究组组长林宁，副组长胡影、陈恺、李童，以及研究组成员、秘书等20余人参加会议。会议总结我国2026年下半年SC44国际会议成果，讨论2026年下半年我国SC27国际标准提案推进策略，听取《网络安全国际标准化动态与路径研究》《国内外网络安全标准化对比分析》2项研究课题汇报，邀请机械工业北京电工技术经济研究所副所长张亮就《ISO/IEC导则第1部分》（2026版）的组织机构与技术工作职责、标准（文件）制定、文件维护、会议、申诉等内容进行授课并开展交流答疑。会议评选出刘梓含（中国电子技术标准化研究院）1名先进个人。</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会2026年第二次“标准周”活动报道，属标准工作动态类信息，非具体法规或标准文本，未载明任何具体条款、施行日期或征求意见截止日。</p><p>报道涉及与公司业务画像命中业务线相关的标准化议题：全体成员会议主题分享涵盖具身智能和智能体安全、面向人工智能的网络安全技术与产品演进等（关联AI应用、信息化·网安）；人工智能安全标准工作组（WG9）第四次全体会议审议推进12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿（关联AI应用）；数据安全标准工作组（WG8）第二次全体会议审议推进14项标准草案、6项征求意见稿（关联数据要素）；新技术安全标准特别工作组（SWG-ETS）同期开设量子安全、云安全、新技术安全三场专题研讨会（关联信息化·网安）。</p><p>电子产品信息清除分论坛涉及GB 46864-2025强标实施筹备及其3项配套网络安全标准实践指南发布解读，该标准编号及配套文件具体内容原文未展开。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本条为活动报道，未给出可执行义务，对业务线的直接触发条件待确认。若后续WG9推进的人工智能安全推荐性国家标准征求意见稿、国家标准化指导性技术文件草案正式发布征求意见或实施，公司AI应用相关产品（如星环、星枢中的AI能力）在标准适用范围内的合规要求可能发生变化；若WG8推进的数据安全标准草案、征求意见稿落地，可能影响数据要素相关业务的数据处理与安全要求；若SWG-ETS云安全、量子安全等议题形成标准文件，可能影响信息化·网安相关产品与服务的适配要求。上述影响均取决于后续标准文本的适用范围与实施安排，现无法确定。</p></div><div class="blk"><div class="lab">建议</div><ul><li>持续跟踪全国网安标委WG8（数据安全）、WG9（人工智能安全）、SWG-ETS（新技术安全）后续标准草案、征求意见稿的公开征求意见通知与发布文本，在标准文本公开后再评估对星环、星枢及AI应用、数据要素、信息化·网安业务的适用性与整改需求；本条报道本身无需启动具体合规动作。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“9月15日至16日，召开人工智能安全标准工作组（WG9）第四次全体会议。”<span class="loc">WG9第四次全体会议段</span></blockquote><blockquote class="quote">“会议审议推进了12项推荐性国家标准草案、2项国家标准化指导性技术文件草案、1项推荐性国家标准征求意见稿”<span class="loc">WG9第四次全体会议段</span></blockquote><blockquote class="quote">“9月15日至17日，召开数据安全标准工作组（WG8）第二次全体会议。”<span class="loc">WG8第二次全体会议段</span></blockquote><blockquote class="quote">“会议审议推进了14项标准草案、6项征求意见稿。”<span class="loc">WG8第二次全体会议段</span></blockquote><blockquote class="quote">“会议同期开设量子安全、云安全、新技术安全三场专题研讨会，聚焦量子计算安全、云安全与云原生、卫星互联网、低空产业等新兴领域安全议题”<span class="loc">SWG-ETS第二次全体会议段</span></blockquote><blockquote class="quote">“受邀专家围绕新一代商用密码算法、网络安全产品互联互通、科学智能（AI4S）的进展与安全、具身智能和智能体安全、面向人工智能的网络安全技术与产品演进、2026年中国网络安全产业发展等主题分享技术方案和标准化实践。”<span class="loc">标准周全体成员会议段</span></blockquote><blockquote class="quote">“对GB 46864-2025强标配套落地实施的3项网络安全标准实践指南进行了发布解读”<span class="loc">电子产品信息清除分论坛段</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/xwdt1/202609/82b38e25c8904dcf906450f99f489759.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article>
+<article class="item" id="item-itm-20261015-8125">
+  <header>
+    <div class="meta">
+      <span class="badge">02</span>
+      <span class="score">64</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-15</span>
+      <span class="chip">AI应用</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开
+发布时间：
+2026-04-07
+2026年3月30日，全国网络安全标准化技术委员会2026年第一次全体委员会议在广东省珠海市召开。中央网信办副主任、国家网信办副主任、网安标委主任委员王京涛出席会议并讲话，会议由温哲副主任委员主持。
+会议首先播放总结视频，从工作机制建设、组织架构完善、标准体系建设、强制性国家标准研制、标准宣贯实施、国际标准化等方面系统回顾了第三届网安标委工作成果。会议指出，第三届网安标委在市场监管总局、国家标准委的有力指导下，在工业和信息化部、公安部、国家安全部、国家保密局、国家密码管理局等部门的大力支持下，各位委员、工作组和秘书处扎实开展大量工作，成效显著。
+会议强调，网安标委一是要谋划布局未来五年工作。2026年是“十五五”开局之年，也是网安标委换届之年，要对标国民经济和社会发展第十五个五年规划纲要，按照网络强国建设和国家网络安全工作部署要求，结合当前国际、国内的形势变化，从标准研制、组织管理、应用实施等多方面主动谋划网安标委“十五五”的工作。二是要加快重点亟需标准研制。要进一步完善关键信息基础设施安全标准化建设，加快网络安全产品互联互通系列标准研制，实现网络安全产品级、系统级互联互通。要借鉴人工智能生成合成内容标识管理的“政策文件+标准+配套实践指南”模式，以标准推动政策文件落地实施；新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准。三是要加大标准实施应用力度。加强电子产品信息清除强标、网络安全产品互联互通等标准落地实施与应用推广，加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级；针对新兴前沿技术领域，利用好指导性技术文件、标准实践指南。四是要抢抓国际标准话语权。探索常态化承办国际标准会议的工作模式，承担好ISO IEC JTC1 SC27和SC44两个国际标准化技术组织国内对口的职责和任务，发挥好国内各相关领域标准专家力量，持续提升我国国际标准提案的质量。积极借鉴国际标准，提高我国标准质量。要围绕人工智能、抗量子密码等新技术领域，多开展国际技术交流。五是要持续提升网安标委影响力。充分发挥新成立的人工智能安全标准工作组（WG9）、网络安全国际标准研究组（SG1）作用，围绕粤港澳协同等深入开展标准研讨。要组织做好新一届委员和工作组成员单位征集遴选工作。各位委员、各个工作组要进一步加强协同联动、互相配合，秘书处要更好地发挥好参谋助手和桥梁纽带作用，共同把网安标委打造成网络安全领域具有广泛影响力的标准化技术组织。
+会议审议通过了网安标委2025年工作总结和2026年工作要点，听取了网安标委2025年度财务报告、各工作组2025年工作总结和2026年工作计划汇报，对2025年度网安标委标准化工作先进个人和先进单位进行了表彰。
+网安标委副主任委员、秘书长、副秘书长以及各位委员、各工作组组长和副组长、相关组织代表参加会议。
+附件：
+分享到：
+微信分享“扫一扫”</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会2026年第一次全体委员会议的会议报道，未载明具体征求意见的标准草案、条款或意见反馈渠道，属于网络安全标准化工作部署层面的信息。</p><p>会议提出要加快重点亟需标准研制，包括完善关键信息基础设施安全标准化建设、加快网络安全产品互联互通系列标准研制，并借鉴人工智能生成合成内容标识管理&#x27;政策文件+标准+配套实践指南&#x27;模式以标准推动政策文件落地实施。</p><p>会议明确新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准，并围绕人工智能、抗量子密码等新技术领域开展国际技术交流。</p><p>会议还提出加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级，并针对新兴前沿技术领域利用好指导性技术文件、标准实践指南。</p><p>会议指出2026年是&#x27;十五五&#x27;开局之年，也是网安标委换届之年，要从标准研制、组织管理、应用实施等多方面谋划&#x27;十五五&#x27;工作。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>若后续人工智能安全标准工作组（WG9）就智能体安全等标准形成征求意见稿或发布稿，公司AI应用业务线在智能体相关产品的研发、评测与对外提供环节可能需对照相应标准要求；若网络安全标识相关标准落地，公司信息化·网安业务线涉及联网产品安全标识等级的合规判定条件可能被触发；若网络安全产品互联互通系列标准研制推进，涉及网络安全产品对接的系统集成场景可能需满足级、系统级互联互通要求。上述标准目前尚未见具体文本，具体适用条款与生效时间待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>持续跟踪网安标委人工智能安全标准工作组（WG9）及网络安全标识、网络安全产品互联互通相关标准的研制进展与征求意见通知；在相应标准草案公开征求意见时，组织AI应用与信息化·网安相关产品线开展条款比对；关注人工智能生成合成内容标识管理&#x27;政策文件+标准+配套实践指南&#x27;模式的配套文件动向。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“要借鉴人工智能生成合成内容标识管理的“政策文件+标准+配套实践指南”模式，以标准推动政策文件落地实施；新组建的人工智能安全标准工作组（WG9）要迅速发挥作用，加快研制智能体安全等标准。”<span class="loc">会议强调第二项&#x27;加快重点亟需标准研制&#x27;部分</span></blockquote><blockquote class="quote">“要进一步完善关键信息基础设施安全标准化建设，加快网络安全产品互联互通系列标准研制，实现网络安全产品级、系统级互联互通。”<span class="loc">会议强调第二项&#x27;加快重点亟需标准研制&#x27;部分</span></blockquote><blockquote class="quote">“加快网络安全标识相关标准的研制应用，依据标准为摄像头、智能门锁、扫地机器人等联网产品确定安全标识等级；针对新兴前沿技术领域，利用好指导性技术文件、标准实践指南。”<span class="loc">会议强调第三项&#x27;加大标准实施应用力度&#x27;部分</span></blockquote><blockquote class="quote">“要围绕人工智能、抗量子密码等新技术领域，多开展国际技术交流。”<span class="loc">会议强调第四项&#x27;抢抓国际标准话语权&#x27;部分</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/xwdt1/202604/03df3b74b6ea4e1d8b2a40e2364b030e.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>数据要素与个人信息保护监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-itm-20261019-8013">
+  <header>
+    <div class="meta">
+      <span class="badge">03</span>
+      <span class="score">66</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-19</span>
+      <span class="chip">数据要素</span><span class="chip">信息化·网安</span>
+    </div>
+    <h3>全国网络安全标准化技术委员会2025年第一次全体委员会议在苏州召开</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>申请成员单位
+|
+登录
+首页
+新闻动态
+行业观点
+标准征求意见
+出版物
+关于我们
+首页 / 新闻动态 / 新闻动态
+全国网络安全标准化技术委员会2025年第一次全体委员会议在苏州召开
+发布时间：
+2025-04-17
+2025年4月14日，全国网络安全标准化技术委员会2025年第一次全体委员会议在江苏省苏州市召开。中央网信办副主任、国家网信办副主任、网安标委主任委员王京涛出席会议并讲话。
+会议指出，2024年，在市场监管总局、国家标准委的有力指导下，在有关主管部门的大力支持下，在各位委员专家、工作组、秘书处的共同努力下，网安标委落实大网络安全工作格局要求，实现网络安全、数据安全、内容安全三个层面的全覆盖，在机制建设、重点标准研制、国际标准化等方面取得了积极成效，
+会议强调，2025年，网安标委要深入学习贯彻习近平总书记关于网络强国的重要思想，高起点、高标准、高质量谋划网络安全标准化工作。一是要加大网络安全重点标准研制力度，围绕网络安全管理工作亟需，加快电子产品信息清除、儿童手表安全等强制性国家标准研制，加强智能驾驶安全、低空经济安全、抗量子密码等标准前瞻性研究。二是要大力提升网络安全标准应用实施效果，将网络安全管理工作和标准化工作紧密结合，加快网络安全产品互联互通系列标准研制和落地实施，推动标准在重点行业和典型场景的试点和应用。三是要扩大网络安全国际标准话语权，通过举办SC27国际会议，进一步扩大我国网络安全国际标准化朋友圈。四是要持续强化网安标委专业技术能力建设，各委员和工作组要加大技术研究和标准储备，秘书处要发挥好桥梁纽带作用，有效凝聚网络安全标准化工作合力。
+会议审议通过了网安标委2024年工作总结和2025年工作要点，听取了网安标委2024年度财务报告、各工作组2024年工作总结和2025年工作计划汇报，对2024年度网安标委标准化工作先进个人进行了表彰。
+国家标准委有关负责同志到会指导，网安标委副主任委员、秘书长、副秘书长以及各位委员、各工作组组长和副组长、相关组织代表参加会议。
+附件：
+分享到：
+微信分享“扫一扫”
+全国网络安全标准化技术委员会秘书处 版权所有 ©2009-2026
+地址：中国 北京 安定门东大街一号 中国电子技术标准化研究院
+联系电话：010-64102730,64102731 传真：010-64102997 邮编：100007
+京ICP备05013730号-14
+京公网安备11010102004561号
+新闻动态</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会2025年第一次全体委员会议的新闻通报，非具体法规或标准征求意见稿，未列出任何条款化义务。会议指出2025年工作要点包括：加大网络安全重点标准研制力度（加快电子产品信息清除、儿童手表安全等强制性国家标准研制，加强智能驾驶安全、低空经济安全、抗量子密码等标准前瞻性研究）；提升网络安全标准应用实施效果（加快网络安全产品互联互通系列标准研制和落地实施，推动标准在重点行业和典型场景的试点和应用）；扩大网络安全国际标准话语权；强化专业技术能力建设。</p><p>会议审议通过了网安标委2024年工作总结和2025年工作要点，属标准化工作部署，不直接设定企业合规义务；其中&#x27;重点行业和典型场景的试点和应用&#x27;与&#x27;网络安全产品互联互通&#x27;方向，与本公司信息化·网安业务线可能存在的产品互联互通与安全标准适配需求相关，但本条未点名任何行业、场景或企业，具体适用关系待相关标准正式发布后确认。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>触发条件：若网安标委后续就&#x27;网络安全产品互联互通系列标准&#x27;或强制性国家标准正式发布征求意见稿/标准文本，且其适用范围覆盖本公司数字建造平台（星环）、投建营一体化平台（星枢）等产品或所服务的重点行业场景，则可能对产品互联互通能力、安全功能配置提出适配要求；本条本身仅为会议通报，未设定生效义务，对数据要素、信息化·网安业务线的具体影响待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>1) 持续跟踪网安标委&#x27;网络安全产品互联互通系列标准&#x27;及电子产品信息清除等强制性国家标准的研制进展，在正式征求意见稿发布时启动内部评估；2) 结合信息化·网安业务线，梳理星环、星枢等平台的互联互通接口与安全能力现状，为标准落地预留改造空间；3) 数据要素相关业务暂无需依据本条调整，待具体标准文本明确数据安全要求后再行判断。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“加快电子产品信息清除、儿童手表安全等强制性国家标准研制，加强智能驾驶安全、低空经济安全、抗量子密码等标准前瞻性研究”<span class="loc">会议强调部分第二点（2025年工作要点第一项）</span></blockquote><blockquote class="quote">“加快网络安全产品互联互通系列标准研制和落地实施，推动标准在重点行业和典型场景的试点和应用”<span class="loc">会议强调部分第三点（2025年工作要点第二项）</span></blockquote><blockquote class="quote">“会议审议通过了网安标委2024年工作总结和2025年工作要点”<span class="loc">会议审议事项段落</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/xwdt1/202504/06f1f18511474d2885d622b05616f2dc.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>网络与数据安全监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-itm-20261013-8406">
+  <header>
+    <div class="meta">
+      <span class="badge">04</span>
+      <span class="score">56</span>
+      <span class="tag">征求意见</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">全国网络安全标准化技术委员会 · TC260 › 标准动态 · 2026-10-13</span>
+      <span class="chip">信息化·网安</span>
+    </div>
+    <h3>2026-10-13 关于下达25项网络安全推荐性国家标准计划的通知</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>申请成员单位
+|
+登录
+首页
+新闻动态
+行业观点
+标准征求意见
+出版物
+关于我们
+首页 / 新闻动态 / 通知公告
+关于下达25项网络安全推荐性国家标准计划的通知
+发布时间：
+2026-10-13
+各工作组、各项目牵头承担单位：
+近日，国家标准化管理委员会下达的推荐性国家标准计划，其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，详细信息见附件。
+请项目所属工作组制定项目推进计划，并督促项目牵头承担单位按计划抓紧落实，在计划执行中要加强协调，广泛征求意见，确保标准质量和水平，按要求完成国家标准制修订任务。
+附件：25项网络安全推荐性国家标准计划项目清单
+全国网络安全标准化技术委员会秘书处
+2026年10月13日
+附件：
+网安秘字〔2026〕121号——关于下达25项网络安全推荐性国家标准计划的通知.pdf
+分享到：
+微信分享“扫一扫”
+全国网络安全标准化技术委员会秘书处 版权所有 ©2009-2026
+地址：中国 北京 安定门东大街一号 中国电子技术标准化研究院
+联系电话：010-64102730,64102731 传真：010-64102997 邮编：100007
+京ICP备05013730号-14
+京公网安备11010102004561号
+新闻动态</p></div><div class="blk"><div class="lab">适用性</div><p>全国适用 · 指引性要求（其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理） <span class="muted">（模型预判，以原文为准）</span></p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为全国网络安全标准化技术委员会秘书处发布的《关于下达25项网络安全推荐性国家标准计划的通知》，属标准计划下达类征求意见/推进通知，明确《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，并要求项目所属工作组制定项目推进计划、督促牵头承担单位抓紧落实、加强协调、广泛征求意见。</p><p>通知正文未列出25项标准的具体名称、内容、适用范围与实施安排，仅以附件《25项网络安全推荐性国家标准计划项目清单》形式给出详细信息，因此无法从本条原文判断具体标准对密码使用、数据接口或网络安全管理提出的具体要求。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>本条命中信息化·网安业务线：若后续附件清单中的标准（如涉及JSON密码使用语法等密码与数据接口类标准）在正式发布并适用后，公司数字建造平台、投建营一体化平台、产业互联网·招采及AI应用、数据要素相关产品的密码使用与数据接口设计，可能被要求对照标准进行合规评估与改造；触发条件为该批标准正式发布并对公司相关产品适用，具体标准条目、适用范围与施行时间待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>建议关注该通知附件《25项网络安全推荐性国家标准计划项目清单》以确认与公司业务相关的标准项目及牵头单位；在相关标准正式发布前，对涉及密码使用、数据接口的信息化·网安相关产品线进行现状梳理，为后续标准符合性评估预留改造窗口；同时跟踪全国网络安全标准化技术委员会的征求意见动态。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“近日，国家标准化管理委员会下达的推荐性国家标准计划，其中《网络安全技术 JSON密码使用语法规范》等25项国家标准由全国网络安全标准化技术委员会归口管理，详细信息见附件。”<span class="loc">通知正文第一段</span></blockquote><blockquote class="quote">“请项目所属工作组制定项目推进计划，并督促项目牵头承担单位按计划抓紧落实，在计划执行中要加强协调，广泛征求意见，确保标准质量和水平，按要求完成国家标准制修订任务。”<span class="loc">通知正文第二段</span></blockquote><blockquote class="quote">“附件：25项网络安全推荐性国家标准计划项目清单”<span class="loc">正文附件说明</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验</span>
+  </footer>
+</article></section><section class="chapter"><h2>平台经济与市场秩序监管动态<span class="cnt">1 条</span></h2>
+<article class="item" id="item-itm-20261017-7900">
+  <header>
+    <div class="meta">
+      <span class="badge">05</span>
+      <span class="score">57</span>
+      <span class="tag">行业动态</span>
+      <span class="veri" style="color:#a8762e;background:#f5eedd">● 待核验</span>
+      <span class="muted">澎湃新闻 · 澎湃 › 财经 · 2026-10-17</span>
+      <span class="chip">产业互联网·招采</span><span class="chip">数据要素</span><span class="chip">涉外合规</span>
+    </div>
+    <h3>推荐优艾智合港股IPO获中国证监会备案</h3>
+    
+  </header>
+  <div class="blk"><div class="lab">事项内容</div><p>优艾智合港股IPO获中国证监会备案
+澎湃新闻首席记者 李晓青
+2026-10-17 09:34
+来源：澎湃新闻
+∙ IPO最前线 &gt;
+听全文
+字号
+10月16日，中国证监会发布《关于合肥优艾智合机器人股份有限公司境外发行上市及境内未上市股份“全流通”的备案通知书》。
+根据《通知书》内容，优艾智合拟发行不超过49477800股境外上市普通股并在香港联合交易所上市，公司37名股东拟将所持合计243804260股境内未上市股份转为境外上市股份，并在香港联合交易所上市流通。
+2025年9月26日，优艾智合正式向港交所递交招股书，申请通过港交所18C章程在主板上市，中金公司担任独家保荐人。若顺利挂牌，优艾智合将成为港股“移动操作机器人第一股”。
+资料显示，优艾智合成立于2017年，总部位于合肥肥东，是一家工业具身智能科技公司。公司以“一脑多态”为核心架构，为半导体、能源化工、锂电、3C等行业提供具备感知、移动与操作能力的机器人产品及解决方案。
+公司援引弗若斯特沙利文报告，按2024年收入计，优艾智合在全球工业移动操作机器人公司中排名第一，市场份额6.1%；在中国市场的份额为12%。
+从财务数据来看，优艾智合的营收在持续增长，但亏损仍在持续。
+2023年、2024年、2025年营收分别为1.08亿元、2.55亿元、3.4亿元；毛利分别为2814万元、8963万元、1.24亿元；毛利率分别为26.1%、35.2%、36.5%。
+优艾智合收入分为工业物流和巡检运维两个部分。其中，2025年来自工业物流收入为2亿元，占比为59.4%；来自巡检运维收入为1.38亿元，占比为40.6%。
+公司同期的年内亏损分别为2.59亿元、2亿元、3.84亿元；年内亏损率分别为241.5%、78.5%、113.1%；公司经调整净亏损分别为1.31亿元、8119万元、1.06亿元；经调整净亏损率分别为122%、31.9%、31.2%。
+截至2025年12月31日，优艾智合持有的现金及现金等价物为2.43亿元。
+从招股书披露的信息来看，公司客户集中度呈现明显上升趋势。
+2023年至2025年，公司来自最大客户的收入贡献率从10.5%升至20.4%，前五大客户收入贡献率从28.3%攀升至35.8%，公司对主要客户的依赖度在不断增加。
+与客户集中度上升形成对比的是，公司供应商集中度呈现下降趋势。2023年至2025年，公司向最大供应商采购额占比从13.1%降至8.2%，前五大供应商采购额占比从33.2%降至19.4%。
+股东方面，公司创始人、执行董事、首席执行官、董事会主席张朝辉；联合创始人、执行董事兼首席技术官边旭、梅雪松及张朝辉控制的西安优艾等为一致行动人，合计持股约30.24%，构成单一最大股东集团。
+责任编辑：郑景昕
+图片编辑：蒋立冬
+校对：张亮亮
+澎湃新闻报料：021-962866
+澎湃新闻，未经授权不得转载
++1
+收藏
+我要举报
+#优艾智合#IPO
+查看更多
+扫码下载澎湃新闻客户端
+Android版
+iPhone版
+iPad版
+关于澎湃
+加入澎湃
+联系我们
+广告合作
+法律声明
+隐私政策
+澎湃矩阵
+澎湃新闻微博
+澎湃新闻公众号
+澎湃新闻抖音号
+派生万物开放平台
+IP SHANGHAI
+SIXTH TONE
+新闻报料
+报料热线: 021-962866
+报料邮箱: news@thepaper.cn
+沪ICP备14003370号
+沪公网安备31010602008124号
+互联网新闻信息服务许可证：31120170006
+增值电信业务经营许可证：沪B2-2017116
+© 2014-2026 上海东方报业有限公司</p></div><div class="blk"><div class="lab">合规洞察</div><p>本条为境外发行上市备案类行业动态：中国证监会于10月16日发布《关于合肥优艾智合机器人股份有限公司境外发行上市及境内未上市股份“全流通”的备案通知书》，优艾智合拟发行不超过49477800股境外上市普通股并在香港联合交易所上市，37名股东拟将合计243804260股境内未上市股份转为境外上市股份并在港交所上市流通。该案例显示，境内企业赴港上市及境内未上市股份“全流通”需经中国证监会备案，属可参照的境外发行上市路径样本。对本公司命中的涉外合规业务线而言，本条提供的是一则同业境外上市备案事实，未涉及具体备案条件、审核标准或合规义务条款，不能据此推导对本公司的直接合规要求。</p></div><div class="blk"><div class="lab">业务影响判断</div><p>触发条件待确认：若本公司或所属集团未来筹划境外发行上市、或涉及境内未上市股份转为境外上市股份并流通，则可能落入需向中国证监会履行备案程序的同类情形，涉外合规业务线需前置评估备案要求；若本公司业务不涉及境外发行上市及“全流通”安排，本条仅为行业动态，对数字建造平台、投建营一体化平台、产业互联网·招采、数据要素、AI应用、信息化·网安等业务线不构成直接触发。原文未涉及上述业务线的具体监管要求，相关影响待确认。</p></div><div class="blk"><div class="lab">建议</div><ul><li>建议涉外合规条线持续跟踪中国证监会境外发行上市及“全流通”备案的同类案例与公开信息，作为境外资本运作合规的前瞻性参考；如公司或所属集团出现境外发行上市或股份“全流通”筹划意向，应提前核实备案适用条件与申报要求（原文未载明具体条件，需另行依据官方规定确认）；本条不涉及数据要素、招采等业务线的直接合规动作，暂无需据此调整相关业务流程。</li></ul></div><div class="blk"><div class="lab">原文依据</div><blockquote class="quote">“10月16日，中国证监会发布《关于合肥优艾智合机器人股份有限公司境外发行上市及境内未上市股份“全流通”的备案通知书》。”<span class="loc">正文第一段</span></blockquote><blockquote class="quote">“优艾智合拟发行不超过49477800股境外上市普通股并在香港联合交易所上市，公司37名股东拟将所持合计243804260股境内未上市股份转为境外上市股份，并在香港联合交易所上市流通。”<span class="loc">正文第二段</span></blockquote><blockquote class="quote">“2025年9月26日，优艾智合正式向港交所递交招股书，申请通过港交所18C章程在主板上市，中金公司担任独家保荐人。”<span class="loc">正文第三段</span></blockquote></div>
+  <footer class="srcrow"><a class="srcbtn" href="https://www.thepaper.cn/newsDetail_forward_34264414" target="_blank" rel="noopener">查看原文 ↗</a><span class="muted">原文直链</span>
+    <span class="muted">核验说明：已从公开列表页采集，原文直链待人工核验后方可标记为已核验；发布日期为按采集日推断（列表页未标注），待核验</span>
+  </footer>
+</article></section>
+
+<div class="card">
+  <h2>下一步工作建议</h2>
+  <ol class="excl"><li>跟踪落实「全国网络安全标准化技术委员会2026年第二次“标准周」：持续跟踪全国网安标委WG8（数据安全）、WG9（人工智能安全）、SWG-ETS（新技术安全）后续标准草案、征求意见稿的公开征求意见通知与发布文本，在标准文本公开后再评估对星环、…</li><li>跟踪落实「全国网络安全标准化技术委员会2025年第一次全体委员」：1) 持续跟踪网安标委&#x27;网络安全产品互联互通系列标准&#x27;及电子产品信息清除等强制性国家标准的研制进展，在正式征求意见稿发布时启动内部评估；2) 结合信息化·网安业务线，梳理星环、…</li><li>跟踪落实「全国网络安全标准化技术委员会2026年第一次全体委员」：持续跟踪网安标委人工智能安全标准工作组（WG9）及网络安全标识、网络安全产品互联互通相关标准的研制进展与征求意见通知；在相应标准草案公开征求意见时，组织AI应用与信息化·网安相…</li><li>跟踪落实「推荐优艾智合港股IPO获中国证监会备案」：建议涉外合规条线持续跟踪中国证监会境外发行上市及“全流通”备案的同类案例与公开信息，作为境外资本运作合规的前瞻性参考；如公司或所属集团出现境外发行上市或股份“全流通”筹划意向，…</li><li>跟踪落实「2026-10-13 关于下达25项网络安全推荐性国」：建议关注该通知附件《25项网络安全推荐性国家标准计划项目清单》以确认与公司业务相关的标准项目及牵头单位；在相关标准正式发布前，对涉及密码使用、数据接口的信息化·网安相关产品线进…</li></ol>
+  <div class="figcap">以上为按入选条目自动汇总的跟踪提示，落实情况需人工确认，本报告不主张任何事项已完成。</div>
+</div>
+
+<div class="card">
+  <h2>附录：本期信息索引（含未入选条目）</h2>
+  <table><thead><tr><th>#</th><th>标题</th><th>日期</th><th>类型</th><th>发布主体</th>
+  <th>相关度</th><th>核验状态</th><th>结果</th></tr></thead><tbody><tr class="in"><td>1</td><td class="t">全国网络安全标准化技术委员会2026年第二次“标准周”活动圆满收官</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>69</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>2</td><td class="t">全国网络安全标准化技术委员会2025年第一次全体委员会议在苏州召开</td><td>2026-10-19</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>66</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>3</td><td class="t">全国网络安全标准化技术委员会2026年第一次全体委员会议在珠海召开</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>64</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>4</td><td class="t">推荐优艾智合港股IPO获中国证监会备案</td><td>2026-10-17</td><td>行业动态</td><td>澎湃新闻</td><td>57</td><td>待核验</td><td>入选</td></tr><tr class="in"><td>5</td><td class="t">2026-10-13 关于下达25项网络安全推荐性国家标准计划的通知</td><td>2026-10-13</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>56</td><td>待核验</td><td>入选</td></tr><tr class="out"><td>6</td><td class="t">标准征求意见</td><td>2026-10-15</td><td>征求意见</td><td>全国网络安全标准化技术委员会</td><td>54</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>7</td><td class="t">推荐AI发现PHP编程语言严重漏洞：全球七成网站或受威胁，欧洲多国政府网站紧急下线</td><td>2026-10-22</td><td>行业动态</td><td>澎湃新闻</td><td>49</td><td>待核验</td><td>未入选</td></tr><tr class="out"><td>8</td><td class="t">前三季度金融数据出炉 多元化融资特征鲜明</td><td>2026-10-20</td><td>政策文件</td><td>中国政府网</td><td>42</td><td>待核验</td><td>未入选</td></tr></tbody></table>
+  <h3>排除清单（3 条，如实列示）</h3><ul class="excl"><li><b>标准征求意见</b>（54 分）— 相关度 54 低于阈值 55</li><li><b>推荐AI发现PHP编程语言严重漏洞：全球七成网站或受威胁，欧洲多国政府网站紧急下线</b>（49 分）— 相关度 49 低于阈值 55</li><li><b>前三季度金融数据出炉 多元化融资特征鲜明</b>（42 分）— 相关度 42 低于阈值 55</li></ul>
+</div>
+
+<div class="notebox">
+  <h3>编制说明与真实性声明</h3>
+  <p>1. 选取方式：2026年10月8日至2026年10月22日（回溯 15 天）窗口内共
+     8 条，按相关度 ≥55 自动选取
+     5 条，未设逐条勾选或"确认入报告"。</p>
+  <p>2. 排除情况：共排除 3 条，其中未核验/演示
+     0 条、低于阈值 3 条；
+     正式模式下未核验条目一律不入报。</p>
+  <p>3. 日期口径：日期口径：本期入选条目的发布日期依据为列表页明确标注 1 条、按上下文推断 4 条、来源未知（旧条目默认） 0 条、人工录入或订正 0 条；发布日期依据仅说明该日期的记录来源与可信度，不等于条目已完成核验，核验状态以逐条标注为准。</p>
+  <p>4. 数据口径：示意数据：统计口径含未核验/演示条目，非真实监管统计，不得对外引用；图表由本报告数据实时生成，未引用任何外部官方统计。</p>
+  <p>5. 免责：本报告由合规洞察工具自动生成，其中的解读与建议为工具生成的分析参考，不构成法律意见；规范依据以官方发布文本为准，未能核验的依据未在本报告中声称已核对。</p>
+  
+  <p class="muted">生成时间 2026-10-22 06:06 · 文本版（Word）与本可视化版由同一份报告模型渲染，内容同源。</p>
+</div>
+
+</div></body></html>
